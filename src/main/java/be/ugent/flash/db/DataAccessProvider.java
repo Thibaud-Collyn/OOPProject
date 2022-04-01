@@ -1,5 +1,5 @@
 package be.ugent.flash.db;
 
 public interface DataAccessProvider {
-    public DataAccessContext getDataAccessContext();
+    public DataAccessContext getDataAccessContext() throws DataAccessException;
 }

@@ -1,4 +1,5 @@
 package be.ugent.flash.db;
+import java.sql.SQLException;
 
 public interface DataAccessContext extends AutoCloseable{
 
@@ -7,5 +8,5 @@ public interface DataAccessContext extends AutoCloseable{
     PartsDAO getPartsDAO();
 
     @Override
-    void close() throws Exception;
+    void close() throws DataAccessException;
 }
