@@ -1,4 +1,5 @@
 package be.ugent.flash;
 
-public class Question {
+public record Question(int questionId, String title, String textPart, byte[] imagePart, String questionType, String correctAnswer) {
+
 }

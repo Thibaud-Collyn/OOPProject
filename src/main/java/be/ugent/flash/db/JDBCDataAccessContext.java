@@ -1,9 +1,10 @@
 package be.ugent.flash.db;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class JDBCDataAccessContext implements DataAccessContext {
-    private Connection connection;
+    private final Connection connection;
 
     public JDBCDataAccessContext(Connection connection) {
         this.connection = connection;
@@ -11,16 +12,20 @@ public class JDBCDataAccessContext implements DataAccessContext {
 
     @Override
     public QuestionsDAO getQuestionsDAO() {
-        return null;
+        return new JDBCQuestionsDAO(connection);
     }
 
     @Override
     public PartsDAO getPartsDAO() {
-        return null;
+        return new JDBCPartsDAO(connection);
     }
 
     @Override
     public void close() throws DataAccessException {
-
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not close context.", ex);
+        }
     }
 }

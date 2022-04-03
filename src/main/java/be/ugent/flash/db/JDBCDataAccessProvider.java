@@ -14,7 +14,7 @@ public class JDBCDataAccessProvider implements DataAccessProvider{
         try {
             return new JDBCDataAccessContext(getConnection());
         } catch (SQLException ex) {
-            throw new DataAccessException("Kon geen verbinding maken met databank", ex);
+            throw new DataAccessException("Could not connect to database.", ex);
         }
     }
 
