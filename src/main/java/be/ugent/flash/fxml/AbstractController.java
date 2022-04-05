@@ -14,6 +14,8 @@ public abstract class AbstractController {
 
     public abstract void initialize();
 
+    public abstract String getFXML();
+
     public boolean isCorrect(String answer) {
         return answer.equals(question.correctAnswer());
     }

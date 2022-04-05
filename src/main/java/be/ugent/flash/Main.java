@@ -47,7 +47,8 @@ public class Main extends Application {
             // TODO aanvullen
         } else {
             // start de viewer
-            // TODO aanvullen
+            ViewerManager viewerManager = new ViewerManager(dbName, stage);
+            viewerManager.start();
         }
     }
 

@@ -35,4 +35,9 @@ public class MCSController extends AbstractController {
             partBox.getChildren().add(button);
         }
     }
+
+    @Override
+    public String getFXML() {
+        return "MCS.fxml";
+    }
 }
