@@ -34,7 +34,14 @@ public class ViewerManager {
         while (! questions.isEmpty()) {
             Question currentQuestion = questions.get(0);
             AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider);
-            sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
+            while (controller.isCorrect() == null) {
+                sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
+            }
+            if (controller.isCorrect()) {
+                questions.remove(0);
+            } else {
+                questions.add(questions.remove(0));
+            }
         }
     }
 }

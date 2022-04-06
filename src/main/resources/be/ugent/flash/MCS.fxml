@@ -3,8 +3,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-
-<VBox minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ugent.flash.fxml.MCSController">
+<VBox minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TextFlow fx:id="textPart" prefHeight="200.0" prefWidth="200.0" />
       <VBox fx:id="partBox" alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="147.0" />

@@ -2,10 +2,12 @@ package be.ugent.flash.fxml;
 
 import be.ugent.flash.Question;
 import be.ugent.flash.db.DataAccessProvider;
+import javafx.event.ActionEvent;
 
 public abstract class AbstractController {
     protected Question question;
     protected DataAccessProvider dataAccessProvider;
+    protected Boolean correct = null;
 
     public AbstractController(Question question, DataAccessProvider dataAccessProvider) {
         this.question = question;
@@ -16,7 +18,9 @@ public abstract class AbstractController {
 
     public abstract String getFXML();
 
-    public boolean isCorrect(String answer) {
-        return answer.equals(question.correctAnswer());
+    public abstract void answer(ActionEvent event);
+
+    public Boolean isCorrect() {
+        return correct;
     }
 }

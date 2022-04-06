@@ -4,6 +4,7 @@ import be.ugent.flash.Part;
 import be.ugent.flash.Question;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -33,11 +34,18 @@ public class MCSController extends AbstractController {
         for(Part part:parts) {
             Button button = new Button(part.part());
             partBox.getChildren().add(button);
+            button.setOnAction(this::answer);
         }
     }
 
     @Override
     public String getFXML() {
         return "MCS.fxml";
+    }
+
+    @Override
+    public void answer(ActionEvent event) {
+        Button button = (Button)event.getSource();
+        correct = button.getText().equals(question.correctAnswer());
     }
 }
