@@ -6,7 +6,7 @@ import be.ugent.flash.fxml.AbstractController;
 
 public class OpenControllerFactory implements ControllerFactory{
     @Override
-    public AbstractController getController(Question question, DataAccessProvider dataAccessProvider) {
+    public AbstractController getController(Question question, DataAccessProvider dataAccessProvider, boolean wasCorrect) {
         return null;
     }
     //TODO: implement getController

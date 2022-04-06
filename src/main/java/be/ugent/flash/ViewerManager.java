@@ -4,6 +4,7 @@ import be.ugent.flash.db.*;
 import be.ugent.flash.factories.*;
 import be.ugent.flash.fxml.AbstractController;
 import be.ugent.flash.fxml.SceneChanger;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class ViewerManager {
     private final DataAccessProvider dataAccessProvider;
     private HashMap<String, ControllerFactory> typeFactories;
     private final SceneChanger sceneChanger;
+    private boolean wasCorrect = true;
 
     public ViewerManager(String connection, Stage stage) throws DataAccessException{
         this.sceneChanger = new SceneChanger(stage);
@@ -33,15 +35,18 @@ public class ViewerManager {
     public void start() throws IOException {
         while (! questions.isEmpty()) {
             Question currentQuestion = questions.get(0);
-            AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider);
+            AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, wasCorrect);
+            sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
             while (controller.isCorrect() == null) {
-                sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
             }
             if (controller.isCorrect()) {
                 questions.remove(0);
+                wasCorrect = true;
             } else {
                 questions.add(questions.remove(0));
+                wasCorrect = false;
             }
         }
+        Platform.exit();
     }
 }
