@@ -1,6 +1,7 @@
 package be.ugent.flash.fxml;
 
 import be.ugent.flash.Question;
+import be.ugent.flash.ViewerManager;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public abstract class AbstractController {
     public TextFlow textPart;
@@ -20,17 +22,19 @@ public abstract class AbstractController {
 
     protected Question question;
     protected DataAccessProvider dataAccessProvider;
-    protected Boolean correct = null;
+    protected boolean correct;
+    protected ViewerManager viewerManager;
     protected boolean wasCorrect;
 
-    public AbstractController(Question question, DataAccessProvider dataAccessProvider, boolean wasCorrect) {
+    public AbstractController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
         this.question = question;
         this.dataAccessProvider = dataAccessProvider;
         this.wasCorrect = wasCorrect;
+        this.viewerManager = viewerManager;
     }
 
     public void initialize() {
-        prevQuestion.setVisible(wasCorrect);
+        prevQuestion.setVisible(! wasCorrect);
         textPart.getChildren().add(new Text(question.textPart()));
         try {
             image.setImage(new Image(new ByteArrayInputStream(question.imagePart())));
@@ -41,7 +45,9 @@ public abstract class AbstractController {
 
     public abstract String getFXML();
 
-    public abstract void answer(ActionEvent event);
+    public void answer(ActionEvent event) throws IOException {
+        viewerManager.nextQuestion(correct);
+    }
 
     public Boolean isCorrect() {
         return correct;

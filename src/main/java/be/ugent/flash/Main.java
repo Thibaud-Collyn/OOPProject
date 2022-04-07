@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -55,11 +56,13 @@ public class Main extends Application {
             ViewerManager viewerManager = new ViewerManager(dbName, stage);
             viewerManager.start();
         }*/
-        FXMLLoader loader = new FXMLLoader(AbstractController.class.getResource("MCS.fxml"));
+        URL url = AbstractController.class.getResource("/MCS.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
         ViewerManager viewerManager = new ViewerManager(dbName, stage);
         stage.setTitle("Viewer");
         stage.setScene(new Scene(loader.load()));
         stage.show();
+        stage.setResizable(false);
         viewerManager.start();
     }
 

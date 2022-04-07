@@ -2,15 +2,17 @@ package be.ugent.flash.fxml;
 
 import be.ugent.flash.Part;
 import be.ugent.flash.Question;
+import be.ugent.flash.ViewerManager;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MCSController extends AbstractController {
@@ -18,8 +20,8 @@ public class MCSController extends AbstractController {
 
     private ArrayList<Part> parts;
 
-    public MCSController(Question question, DataAccessProvider dataAccessProvider, boolean wasCorrect) {
-        super(question, dataAccessProvider, wasCorrect);
+    public MCSController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect);
         try {
             parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
         } catch (DataAccessException e) {
@@ -35,7 +37,6 @@ public class MCSController extends AbstractController {
             Button button = new Button(letter);
             button.setOnAction(this::answer);
             button.setUserData(i);
-            partBox.getChildren().add(button);
             partBox.add(button, 0, i);
             partBox.add(new TextFlow(new Text(parts.get(i).part())), 1, i);
         }
@@ -43,12 +44,17 @@ public class MCSController extends AbstractController {
 
     @Override
     public String getFXML() {
-        return "MCS.fxml";
+        return "/MCS.fxml";
     }
 
     @Override
     public void answer(ActionEvent event) {
         Button button = (Button)event.getSource();
         correct = question.correctAnswer().equals(button.getUserData() + "");
+        try {
+            super.answer(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

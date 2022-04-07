@@ -11,14 +11,14 @@
 
 <VBox fx:id="card" alignment="TOP_CENTER" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="prevQuestion" prefHeight="93.0" prefWidth="186.0" text="Het antwoord was fout." textFill="RED">
+      <Label fx:id="prevQuestion" prefHeight="0.0" prefWidth="186.0" text="Het antwoord was fout." textFill="RED">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextFlow fx:id="textPart" prefHeight="142.0" prefWidth="500.0" />
-      <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-      <GridPane fx:id="partBox" prefHeight="91.0" prefWidth="500.0">
+      <TextFlow fx:id="textPart" prefHeight="0.0" prefWidth="500.0" />
+      <ImageView fx:id="image" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+      <GridPane fx:id="partBox" prefHeight="100.0" prefWidth="500.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.0" minWidth="10.0" prefWidth="84.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="416.0" minWidth="10.0" prefWidth="416.0" />

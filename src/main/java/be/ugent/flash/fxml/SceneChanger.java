@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class SceneChanger {
     private final Stage stage;
@@ -14,7 +15,8 @@ public class SceneChanger {
     }
 
     public void changeScene(String fxmlFile, AbstractController controller, String title) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(SceneChanger.class.getResource(fxmlFile));
+        URL url = SceneChanger.class.getResource(fxmlFile);
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
         fxmlLoader.setController(controller);
         Scene scene = null;
         scene = new Scene(fxmlLoader.load());

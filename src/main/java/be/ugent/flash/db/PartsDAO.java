@@ -1,5 +1,6 @@
 package be.ugent.flash.db;
 
+import be.ugent.flash.ImagePart;
 import be.ugent.flash.Part;
 
 import java.util.ArrayList;
@@ -17,5 +18,8 @@ public interface PartsDAO {
 
 //    Returns an array list with all parts of a question sorted by partId
     ArrayList<Part> getParts(int qId) throws DataAccessException;
+
+//    Returns an array list with all image parts of a question sorted by partId
+    ArrayList<ImagePart> getImageParts(int qId) throws DataAccessException;
 
 }

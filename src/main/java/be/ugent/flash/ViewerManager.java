@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ViewerManager {
-    private ArrayList<Question> questions = new ArrayList<>();
+    private ArrayList<Question> questions;
     private final DataAccessProvider dataAccessProvider;
-    private HashMap<String, ControllerFactory> typeFactories;
+    private final HashMap<String, ControllerFactory> typeFactories;
     private final SceneChanger sceneChanger;
     private boolean wasCorrect = true;
 
@@ -33,20 +33,24 @@ public class ViewerManager {
     }
 
     public void start() throws IOException {
-        while (! questions.isEmpty()) {
-            Question currentQuestion = questions.get(0);
-            AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, wasCorrect);
-            sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
-            while (controller.isCorrect() == null) {
-            }
-            if (controller.isCorrect()) {
-                questions.remove(0);
-                wasCorrect = true;
-            } else {
-                questions.add(questions.remove(0));
-                wasCorrect = false;
-            }
+        Question currentQuestion = questions.get(0);
+        AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect);
+        sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
+    }
+
+    public void nextQuestion(Boolean correct) throws IOException {
+        if (correct) {
+            questions.remove(0);
+            wasCorrect = true;
+        } else {
+            questions.add(questions.remove(0));
+            wasCorrect = false;
         }
-        Platform.exit();
+        if (questions.isEmpty()) {
+            Platform.exit();
+        }
+        Question currentQuestion = questions.get(0);
+        AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect);
+        sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
     }
 }

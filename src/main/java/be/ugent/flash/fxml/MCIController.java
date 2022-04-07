@@ -1,26 +1,29 @@
 package be.ugent.flash.fxml;
 
-import be.ugent.flash.Part;
+import be.ugent.flash.ImagePart;
 import be.ugent.flash.Question;
 import be.ugent.flash.ViewerManager;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MCCController extends AbstractController{
+public class MCIController extends AbstractController{
     public HBox partBox;
 
-    private ArrayList<Part> parts;
+    private ArrayList<ImagePart> parts;
 
-    public MCCController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
+    public MCIController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
         super(question, dataAccessProvider, viewerManager, wasCorrect);
         try {
-            parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
+            parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getImageParts(question.questionId());
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -28,8 +31,11 @@ public class MCCController extends AbstractController{
 
     public void initialize() {
         super.initialize();
-        for(Part part:parts) {
-            Button button = new Button(part.part());
+        for(int i = 0; i < parts.size(); i++) {
+            ImageView image = new ImageView(new Image(new ByteArrayInputStream(parts.get(i).part())));
+            Button button = new Button();
+            button.setGraphic(image);
+            button.setUserData(i);
             partBox.getChildren().add(button);
             button.setOnAction(this::answer);
         }
@@ -37,13 +43,12 @@ public class MCCController extends AbstractController{
 
     @Override
     public String getFXML() {
-        return "/MCC.fxml";
+        return "/MCI.fxml";
     }
 
-    @Override
     public void answer(ActionEvent event) {
         Button button = (Button)event.getSource();
-        correct = button.getText().equals(parts.get(Integer.parseInt(question.correctAnswer())).part());
+        correct = question.correctAnswer().equals(button.getUserData() + "");
         try {
             super.answer(event);
         } catch (IOException e) {

@@ -1,5 +1,6 @@
 package be.ugent.flash.db;
 
+import be.ugent.flash.ImagePart;
 import be.ugent.flash.Part;
 
 import java.sql.Connection;
@@ -38,6 +39,21 @@ public class JDBCPartsDAO extends JDBCAbstractDAO implements PartsDAO {
             ArrayList<Part> parts = new ArrayList<>();
             while (rs.next()) {
                 Part part = new Part(rs.getInt("part_id"), qId, rs.getString("part"));
+                parts.add(part);
+            }
+            return parts;
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not retrieve parts of give question.", ex);
+        }
+    }
+
+    public ArrayList<ImagePart> getImageParts(int qId) throws DataAccessException {
+        try (PreparedStatement ps = prepare("SELECT part_id, part FROM parts WHERE question_id = ? ORDER BY part_id")) {
+            ps.setInt(1, qId);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<ImagePart> parts = new ArrayList<>();
+            while (rs.next()) {
+                ImagePart part = new ImagePart(rs.getInt("part_id"), qId, rs.getBytes("part"));
                 parts.add(part);
             }
             return parts;
