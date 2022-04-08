@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -46,6 +47,10 @@ public abstract class AbstractController {
     public abstract String getFXML();
 
     public void answer(ActionEvent event) throws IOException {
+        viewerManager.nextQuestion(correct);
+    }
+
+    public void answerKeyPress(KeyEvent event) throws IOException {
         viewerManager.nextQuestion(correct);
     }
 

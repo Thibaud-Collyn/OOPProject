@@ -48,9 +48,10 @@ public class ViewerManager {
         }
         if (questions.isEmpty()) {
             Platform.exit();
+        } else {
+            Question currentQuestion = questions.get(0);
+            AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect);
+            sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
         }
-        Question currentQuestion = questions.get(0);
-        AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect);
-        sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
     }
 }
