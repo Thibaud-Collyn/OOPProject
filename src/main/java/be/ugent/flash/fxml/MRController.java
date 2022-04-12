@@ -18,7 +18,6 @@ import java.util.Arrays;
 
 public class MRController extends AbstractController{
     public GridPane partBox;
-    public Button answer;
 
     private ArrayList<Part> parts;
     private char[] allAnswers;
@@ -44,7 +43,9 @@ public class MRController extends AbstractController{
             partBox.add(checkBox, 0, i);
             partBox.add(new TextFlow(new Text(parts.get(i).part())), 1, i);
         }
-        answer.setOnAction(this::answer);
+        Button button = new Button("OK");
+        card.getChildren().add(button);
+        button.setOnAction(this::answer);
     }
 
     @Override
