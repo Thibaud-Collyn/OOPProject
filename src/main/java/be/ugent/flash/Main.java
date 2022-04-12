@@ -55,7 +55,7 @@ public class Main extends Application {
             // start de viewer
             URL url = AbstractController.class.getResource("/MCS.fxml");
             FXMLLoader loader = new FXMLLoader(url);
-            ViewerManager viewerManager = new ViewerManager(dbName, stage);
+            ViewerManager viewerManager = new ViewerManager("jdbc:sqlite:"+dbName, stage);
             stage.setTitle("Viewer");
             stage.setScene(new Scene(loader.load()));
             stage.show();
