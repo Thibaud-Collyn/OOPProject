@@ -1,9 +1,10 @@
-package be.ugent.flash;
+package be.ugent.flash.viewer;
 
+import be.ugent.flash.Question;
 import be.ugent.flash.db.*;
-import be.ugent.flash.factories.*;
-import be.ugent.flash.fxml.AbstractController;
-import be.ugent.flash.fxml.SceneChanger;
+import be.ugent.flash.viewer.viewer_factories.*;
+import be.ugent.flash.viewer.viewer_fxml.AbstractController;
+import be.ugent.flash.SceneChanger;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -35,7 +36,7 @@ public class ViewerManager {
     public void start() throws IOException {
         Question currentQuestion = questions.get(0);
         AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect);
-        sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
+        sceneChanger.changeViewerScene(controller.getFXML(), controller, currentQuestion.title());
     }
 
     public void nextQuestion(Boolean correct) throws IOException {
@@ -51,7 +52,7 @@ public class ViewerManager {
         } else {
             Question currentQuestion = questions.get(0);
             AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect);
-            sceneChanger.changeScene(controller.getFXML(), controller, currentQuestion.title());
+            sceneChanger.changeViewerScene(controller.getFXML(), controller, currentQuestion.title());
         }
     }
 }

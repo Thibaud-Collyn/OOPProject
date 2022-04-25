@@ -9,19 +9,19 @@ import java.util.Queue;
 
 public interface QuestionsDAO {
 
-//    creates a new question in the database with optional image and fixed question type(not update-able)
+//    Maakt een nieuwe vraag(question) aan met een optionele foto(image) en een onveranderlijk type
     Question createQuestion(String title, String textPart, byte[] imagePart, String questionType, String correctAnswer) throws DataAccessException;
 
-//    Updates an existing question
+//    Update een bestaande vraag met bepaalde question_id
     void updateQuestion(int id, String title, String textPart, byte[] imagePart, String correctAnswer) throws DataAccessException;
 
-//    Removes an existing question
+//    Verwijdert een bestaande vraag met bepaalde question_id
     void removeQuestion(int id) throws DataAccessException;
 
-//   returns a question object based on it's id
+//   Return een vraag op basis van zijn question_id
     Question getQuestion(int id) throws DataAccessException;
 
-//   returns an array list of all questions in the database(ordered by question_id)
+//   Return een array list met alle vragen in de databank(gesorteerd op question_id)
     ArrayList<Question> getAllQuestions() throws DataAccessException;
 
 }

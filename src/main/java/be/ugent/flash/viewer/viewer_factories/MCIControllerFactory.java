@@ -1,10 +1,10 @@
-package be.ugent.flash.factories;
+package be.ugent.flash.viewer.viewer_factories;
 
 import be.ugent.flash.Question;
-import be.ugent.flash.ViewerManager;
+import be.ugent.flash.viewer.ViewerManager;
 import be.ugent.flash.db.DataAccessProvider;
-import be.ugent.flash.fxml.AbstractController;
-import be.ugent.flash.fxml.MCIController;
+import be.ugent.flash.viewer.viewer_fxml.AbstractController;
+import be.ugent.flash.viewer.viewer_fxml.MCIController;
 
 public class MCIControllerFactory implements ControllerFactory{
     @Override

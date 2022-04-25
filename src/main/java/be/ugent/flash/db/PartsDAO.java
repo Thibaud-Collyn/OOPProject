@@ -7,19 +7,19 @@ import java.util.ArrayList;
 
 public interface PartsDAO {
 
-//    Add a part of a multiple choice question based on the id of that question
+//    Voegt een part toe aan een multiple choice vraag op basis van de question_id
     int addPart(int id, String text) throws DataAccessException;
 
-//    Update an existing part based on it's id
+//    Update een part op basis van zijn part_id
     void updatePart(int id, String text) throws DataAccessException;
 
-//    Remove existing question based on it's id
+//    Verwijdert een part op basis van zijn part_id
     void removePart(int id) throws DataAccessException;
 
-//    Returns an array list with all parts of a question sorted by partId
+//    Return een array list met alle parts van een vraag met bepaalde question_id gesorteerd op part_id's
     ArrayList<Part> getParts(int qId) throws DataAccessException;
 
-//    Returns an array list with all image parts of a question sorted by partId
+//    Return een array list met alle image parts van een vraag met bepaalde question_id gesorteerd op part_id's
     ArrayList<ImagePart> getImageParts(int qId) throws DataAccessException;
 
 }

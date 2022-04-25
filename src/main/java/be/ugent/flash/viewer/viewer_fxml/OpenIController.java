@@ -1,7 +1,7 @@
-package be.ugent.flash.fxml;
+package be.ugent.flash.viewer.viewer_fxml;
 
 import be.ugent.flash.Question;
-import be.ugent.flash.ViewerManager;
+import be.ugent.flash.viewer.ViewerManager;
 import be.ugent.flash.db.DataAccessProvider;
 
 public class OpenIController extends OpenController{

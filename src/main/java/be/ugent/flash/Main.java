@@ -1,8 +1,8 @@
 package be.ugent.flash;
 
-import be.ugent.flash.db.DataAccessProvider;
-import be.ugent.flash.db.JDBCDataAccessProvider;
-import be.ugent.flash.fxml.AbstractController;
+import be.ugent.flash.beheersinterface.StartScreenController;
+import be.ugent.flash.viewer.ViewerManager;
+import be.ugent.flash.viewer.viewer_fxml.AbstractController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -50,7 +50,12 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         if (dbName == null) {
             // start de beheersinterface
-            // TODO aanvullen
+            URL url = StartScreenController.class.getResource("/StartScreen.fxml");
+            FXMLLoader loader = new FXMLLoader(url);
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Beheersinterface");
+            stage.show();
+            stage.setResizable(false);
         } else {
             // start de viewer
             URL url = AbstractController.class.getResource("/MCS.fxml");
