@@ -1,6 +1,7 @@
 package be.ugent.flash.beheersinterface;
 
 import be.ugent.flash.SceneChanger;
+import be.ugent.flash.db.DataAccessException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class StartScreenController {
     public BorderPane startScreen;
 
-    public void change(ActionEvent event) throws IOException {
+    public void change(ActionEvent event) throws IOException, DataAccessException {
         Button button = (Button)event.getSource();
         File selectedDB = null;
         if(button.getText().equals("Open een bestaande databank")) {
@@ -24,7 +25,7 @@ public class StartScreenController {
         }
     }
 
-    public void openExistingDB() throws IOException {
+    public void openExistingDB() throws IOException, DataAccessException {
         SceneChanger sceneChanger = new SceneChanger((Stage) startScreen.getScene().getWindow());
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies databank");
@@ -35,7 +36,7 @@ public class StartScreenController {
         }
     }
 
-    public void createNewDB() throws IOException {
+    public void createNewDB() {
         //TODO: implement
     }
 

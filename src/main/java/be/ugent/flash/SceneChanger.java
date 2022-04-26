@@ -1,6 +1,7 @@
 package be.ugent.flash;
 
 import be.ugent.flash.beheersinterface.EditorController;
+import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.viewer.viewer_fxml.AbstractController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,7 +29,7 @@ public class SceneChanger {
         stage.show();
     }
 
-    public void changeInterfaceScene(File selectedDB) throws IOException {
+    public void changeInterfaceScene(File selectedDB) throws IOException, DataAccessException {
         URL url = EditorController.class.getResource("/Editor.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         fxmlLoader.setController(new EditorController(selectedDB));
