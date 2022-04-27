@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class StartScreenController {
-    public BorderPane startScreen;
+    public BorderPane interfaceScreen;
 
     public void change(ActionEvent event) throws IOException, DataAccessException {
         Button button = (Button)event.getSource();
@@ -26,11 +26,11 @@ public class StartScreenController {
     }
 
     public void openExistingDB() throws IOException, DataAccessException {
-        SceneChanger sceneChanger = new SceneChanger((Stage) startScreen.getScene().getWindow());
+        SceneChanger sceneChanger = new SceneChanger((Stage) interfaceScreen.getScene().getWindow());
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies databank");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("sqlite databank", "*.sqlite"));
-        File selectedDB = fileChooser.showOpenDialog(startScreen.getScene().getWindow());
+        File selectedDB = fileChooser.showOpenDialog(interfaceScreen.getScene().getWindow());
         if (selectedDB != null){
             sceneChanger.changeInterfaceScene(selectedDB);
         }
