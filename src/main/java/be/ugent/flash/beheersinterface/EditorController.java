@@ -30,13 +30,13 @@ import java.util.Map;
 public class EditorController extends StartScreenController {
     private final DataAccessProvider dataAccessProvider;
     private ArrayList<Question> questions;
-    private final File selectedDB;
     private final Map<String, String> fullTypes = Map.of("mcs", "Meerkeuze (standaard)",
                                                         "mcc", "Meerkeuze (compact)",
                                                         "mci", "Meerkeuze (Afbeelding)",
                                                         "mr", "Meerantwoord",
                                                         "open", "Open (tekst)",
                                                         "openi", "Open (geheel)");
+    private Question currentQuestion = null;
 
     public BorderPane interfaceScreen;
     public TableView<Question> questionTable;
@@ -46,15 +46,17 @@ public class EditorController extends StartScreenController {
     public GridPane generalItems;
     public HBox imageBox;
     public ImageView image;
+    public Button addQuestionButton;
+    public Button removeQuestionButton;
 
     public EditorController(File selectedDB) throws DataAccessException {
         dataAccessProvider = new JDBCDataAccessProvider("jdbc:sqlite:" + selectedDB.getPath());
-        this.selectedDB = selectedDB;
-        questions = dataAccessProvider.getDataAccessContext().getQuestionsDAO().getAllQuestions();
     }
 
-    public void initialize(){
-        QEditorBox.getChildren().add(new Label("(Geen vraag geselecteerd)"));
+//    laad de tableView in op basis van de huidige status van de db()
+    public void initialize() throws DataAccessException {
+        questions = dataAccessProvider.getDataAccessContext().getQuestionsDAO().getAllQuestions();
+        noneSelected();
         ObservableList<Question> Oquestions = FXCollections.observableArrayList(questions);
         titleColumn.setCellValueFactory(question -> new SimpleStringProperty(question.getValue().title()));
         typeColumn.setCellValueFactory(question -> new SimpleStringProperty(fullTypes.get(question.getValue().questionType())));
@@ -62,14 +64,20 @@ public class EditorController extends StartScreenController {
         questionTable.getSelectionModel().selectedItemProperty().addListener(this::showQEditor);
     }
 
-//    Veranderd het rechter paneel van die interface op basis van de geselecteerde vraag
+//    Veranderd het rechter paneel van de editor op basis van de geselecteerde vraag
     public void showQEditor(ObservableValue<? extends Question> observable, Question oldValue, Question newValue) {
-        QEditorBox.getChildren().clear();
-        generalEditor(observable.getValue());
+        if(observable.getValue() != null) {
+            QEditorBox.getChildren().clear();
+            generalEditor(observable.getValue());
+        } else {
+            noneSelected();
+        }
     }
 
 //    Functie om algemene elementen van de vraag(bv. titel, type,...) in de interface te tonen.
     public void generalEditor(Question question) {
+        currentQuestion = question;
+        removeQuestionButton.setDisable(false);
         generalItems = new GridPane();
         generalItems.setHgap(10);
         generalItems.setVgap(10);
@@ -78,17 +86,22 @@ public class EditorController extends StartScreenController {
         generalItems.add(new Label("Type"),0, 1);
         generalItems.add(new Label(fullTypes.get(question.questionType())),1, 1);
         generalItems.add(new Label("Tekst"),0, 2);
-        generalItems.add(new TextArea(question.textPart()), 1, 2);
+        TextArea textArea = new TextArea(question.textPart());
+        textArea.setWrapText(true);
+        generalItems.add(textArea, 1, 2);
 
 //        Het eventueel toevoegen van een image(met bijhorende verwijder en verander button) als die er is of van een voeg image toe button als die er niet is
         generalItems.add(new Label("Afbeelding"), 0, 3);
         imageBox = new HBox();
         imageBox.setSpacing(10);
+        image = new ImageView();
+        image.setFitHeight(200);
+        image.setFitWidth(200);
+        image.setPreserveRatio(true);
         if(question.imagePart() == null) {
-            image = new ImageView();
             buttonReset(true);
         } else {
-            image = new ImageView(new Image(new ByteArrayInputStream(question.imagePart())));
+            image.setImage(new Image(new ByteArrayInputStream(question.imagePart())));
             buttonReset(false);
             imageBox.setUserData(question.imagePart());
         }
@@ -116,6 +129,13 @@ public class EditorController extends StartScreenController {
         buttonReset(true);
     }
 
+//    reset het rechtse paneel van de editor als er geen vraag geselecteerd is
+    public void noneSelected(){
+        QEditorBox.getChildren().clear();
+        removeQuestionButton.setDisable(true);
+        QEditorBox.getChildren().add(new Label("(Geen vraag geselecteerd)"));
+    }
+
 //    Hulpmethode om na een verandering/wijziging van images terug te juist buttons toe te voegen aan de interface.
 //    Als de methode true meekrijgt zal er een 'voeg afbeelding toe' knop toegevoegd worden, anders een wijzig en verwijder knop
     public void buttonReset(Boolean noImage) {
@@ -135,5 +155,15 @@ public class EditorController extends StartScreenController {
             vBox.setAlignment(Pos.CENTER_LEFT);
             imageBox.getChildren().addAll(image, vBox);
         }
+    }
+
+//    verwijder geselecteerde vraag en laad de db opnieuw in
+    public void removeQuestion(ActionEvent event) throws DataAccessException {
+        dataAccessProvider.getDataAccessContext().getQuestionsDAO().removeQuestion(currentQuestion.questionId());
+        initialize();
+    }
+
+    public void addQuestion(ActionEvent event) {
+        //TODO: implement
     }
 }
