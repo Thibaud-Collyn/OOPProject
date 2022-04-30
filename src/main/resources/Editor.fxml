@@ -48,7 +48,15 @@
                   <Button fx:id="removeQuestionButton" mnemonicParsing="false" onAction="#removeQuestion" text="Vraag verwijderen" />
                </children>
             </HBox>
-            <HBox prefHeight="35.0" prefWidth="625.0" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="625.0" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Opslaan" />
+                  <Button fx:id="restoreButton" mnemonicParsing="false" onAction="#restore" text="Herstellen" />
+                  <Button mnemonicParsing="false" text="Preview" />
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding></HBox>
          </children>
       </HBox>
    </bottom>

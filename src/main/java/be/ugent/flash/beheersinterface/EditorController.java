@@ -1,9 +1,14 @@
 package be.ugent.flash.beheersinterface;
 
 import be.ugent.flash.Question;
+import be.ugent.flash.beheersinterface.parteditors.McsPartEditorFactory;
+import be.ugent.flash.beheersinterface.parteditors.OpenPartEditorFactory;
+import be.ugent.flash.beheersinterface.parteditors.PartEditor;
+import be.ugent.flash.beheersinterface.parteditors.PartEditorFactory;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import be.ugent.flash.db.JDBCDataAccessProvider;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,8 +30,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
+// Deze klasse erft over van de startScreenController zodat de menuBar makkelijk overgenomen kan worden.
 public class EditorController extends StartScreenController {
     private final DataAccessProvider dataAccessProvider;
     private ArrayList<Question> questions;
@@ -36,6 +43,10 @@ public class EditorController extends StartScreenController {
                                                         "mr", "Meerantwoord",
                                                         "open", "Open (tekst)",
                                                         "openi", "Open (geheel)");
+    private final Map<String, PartEditorFactory> partFactories = Map.of("mcs", new McsPartEditorFactory(),
+                                                                        "open", new OpenPartEditorFactory());
+
+    private PartEditor partEditor;
     private Question currentQuestion = null;
 
     public BorderPane interfaceScreen;
@@ -48,13 +59,15 @@ public class EditorController extends StartScreenController {
     public ImageView image;
     public Button addQuestionButton;
     public Button removeQuestionButton;
+    public Button restoreButton;
 
-    public EditorController(File selectedDB) throws DataAccessException {
+    public EditorController(File selectedDB) {
         dataAccessProvider = new JDBCDataAccessProvider("jdbc:sqlite:" + selectedDB.getPath());
     }
 
 //    laad de tableView in op basis van de huidige status van de db()
     public void initialize() throws DataAccessException {
+        questionTable.disableProperty().bind(Bindings.createBooleanBinding(() -> !imageCheck()));
         questions = dataAccessProvider.getDataAccessContext().getQuestionsDAO().getAllQuestions();
         noneSelected();
         ObservableList<Question> Oquestions = FXCollections.observableArrayList(questions);
@@ -67,7 +80,6 @@ public class EditorController extends StartScreenController {
 //    Veranderd het rechter paneel van de editor op basis van de geselecteerde vraag
     public void showQEditor(ObservableValue<? extends Question> observable, Question oldValue, Question newValue) {
         if(observable.getValue() != null) {
-            QEditorBox.getChildren().clear();
             generalEditor(observable.getValue());
         } else {
             noneSelected();
@@ -76,6 +88,7 @@ public class EditorController extends StartScreenController {
 
 //    Functie om algemene elementen van de vraag(bv. titel, type,...) in de interface te tonen.
     public void generalEditor(Question question) {
+        QEditorBox.getChildren().clear();
         currentQuestion = question;
         removeQuestionButton.setDisable(false);
         generalItems = new GridPane();
@@ -107,6 +120,8 @@ public class EditorController extends StartScreenController {
         }
         generalItems.add(imageBox, 1, 3);
         QEditorBox.getChildren().add(generalItems);
+        partEditor = partFactories.get(currentQuestion.questionType()).getPartEditor(currentQuestion, dataAccessProvider, QEditorBox);
+        partEditor.loadParts();
     }
 
     public void chooseImage(ActionEvent event) {
@@ -122,6 +137,15 @@ public class EditorController extends StartScreenController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public boolean imageCheck() {
+        if(imageBox == null) {
+            return true;
+        } else {
+            byte[] currentImage = (byte[]) imageBox.getUserData();
+            return Arrays.equals(currentQuestion.imagePart(), currentImage);
         }
     }
 
@@ -164,6 +188,15 @@ public class EditorController extends StartScreenController {
     }
 
     public void addQuestion(ActionEvent event) {
+        //TODO: implement
+    }
+
+//    Maakt alle aanpassingen op de huidige vraag ongedaan als die nog niet opgeslagen is.
+    public void restore() {
+        generalEditor(currentQuestion);
+    }
+
+    public void updateQuestion() {
         //TODO: implement
     }
 }
