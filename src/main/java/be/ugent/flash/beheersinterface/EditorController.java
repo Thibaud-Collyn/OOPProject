@@ -1,10 +1,8 @@
 package be.ugent.flash.beheersinterface;
 
 import be.ugent.flash.Question;
-import be.ugent.flash.beheersinterface.parteditors.McsPartEditorFactory;
-import be.ugent.flash.beheersinterface.parteditors.OpenPartEditorFactory;
-import be.ugent.flash.beheersinterface.parteditors.PartEditor;
-import be.ugent.flash.beheersinterface.parteditors.PartEditorFactory;
+import be.ugent.flash.beheersinterface.parteditor_factories.*;
+import be.ugent.flash.beheersinterface.parteditors.*;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import be.ugent.flash.db.JDBCDataAccessProvider;
@@ -44,7 +42,9 @@ public class EditorController extends StartScreenController {
                                                         "open", "Open (tekst)",
                                                         "openi", "Open (geheel)");
     private final Map<String, PartEditorFactory> partFactories = Map.of("mcs", new McsPartEditorFactory(),
-                                                                        "open", new OpenPartEditorFactory());
+                                                                        "mcc", new MccPartEditorFactory(),
+                                                                        "open", new OpenPartEditorFactory(),
+                                                                        "openi", new OpenIPartEditorFactory());
 
     private PartEditor partEditor;
     private Question currentQuestion = null;
@@ -57,6 +57,8 @@ public class EditorController extends StartScreenController {
     public GridPane generalItems;
     public HBox imageBox;
     public ImageView image;
+    public TextField title;
+    public TextArea qText;
     public Button addQuestionButton;
     public Button removeQuestionButton;
     public Button restoreButton;
@@ -95,13 +97,14 @@ public class EditorController extends StartScreenController {
         generalItems.setHgap(10);
         generalItems.setVgap(10);
         generalItems.add(new Label("Titel"),0, 0);
-        generalItems.add(new TextField(question.title()),1, 0);
+        title = new TextField(question.title());
+        generalItems.add(title,1, 0);
         generalItems.add(new Label("Type"),0, 1);
         generalItems.add(new Label(fullTypes.get(question.questionType())),1, 1);
         generalItems.add(new Label("Tekst"),0, 2);
-        TextArea textArea = new TextArea(question.textPart());
-        textArea.setWrapText(true);
-        generalItems.add(textArea, 1, 2);
+        qText = new TextArea(question.textPart());
+        qText.setWrapText(true);
+        generalItems.add(qText, 1, 2);
 
 //        Het eventueel toevoegen van een image(met bijhorende verwijder en verander button) als die er is of van een voeg image toe button als die er niet is
         generalItems.add(new Label("Afbeelding"), 0, 3);
@@ -127,7 +130,7 @@ public class EditorController extends StartScreenController {
     public void chooseImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies afbeelding");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("jpeg afbeelding", "*.jpg"), new FileChooser.ExtensionFilter("png afbeelding", "*.png"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("jpg afbeelding", "*.jpg"), new FileChooser.ExtensionFilter("jpeg afbeelding", "*.jpeg"), new FileChooser.ExtensionFilter("png afbeelding", "*.png"));
         File newImage = fileChooser.showOpenDialog(interfaceScreen.getScene().getWindow());
         if (newImage != null){
             try {
@@ -183,6 +186,7 @@ public class EditorController extends StartScreenController {
 
 //    verwijder geselecteerde vraag en laad de db opnieuw in
     public void removeQuestion(ActionEvent event) throws DataAccessException {
+//        TODO: remove parts if necessary
         dataAccessProvider.getDataAccessContext().getQuestionsDAO().removeQuestion(currentQuestion.questionId());
         initialize();
     }
@@ -196,7 +200,11 @@ public class EditorController extends StartScreenController {
         generalEditor(currentQuestion);
     }
 
-    public void updateQuestion() {
-        //TODO: implement
+    public void updateQuestion() throws DataAccessException {
+        currentQuestion = new Question(currentQuestion.questionId(), title.getText(), qText.getText(), (byte[]) imageBox.getUserData(), currentQuestion.questionType(), partEditor.getCorrectAnswer());
+        partEditor.saveParts();
+//        TODO: catch update error and show error pop up
+        dataAccessProvider.getDataAccessContext().getQuestionsDAO().updateGeneralQuestion(currentQuestion.questionId(), currentQuestion.title(), currentQuestion.textPart(), currentQuestion.imagePart());
+        initialize();
     }
 }

@@ -16,19 +16,46 @@ public class JDBCPartsDAO extends JDBCAbstractDAO implements PartsDAO {
     }
 
     @Override
-    public int addPart(int id, String text) throws DataAccessException {
-        //TODO: implement
-        return 0;
+    public void addTextPart(int qId, String text) throws DataAccessException {
+        try (PreparedStatement ps = prepare("INSERT INTO parts(question_id, part) VALUES(?, ?)")){
+            ps.setInt(1, qId);
+            ps.setString(2, text);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not add part", ex);
+        }
+    }
+
+    @Override
+    public void addImagePart(int qId, byte[] image) throws DataAccessException {
+        try (PreparedStatement ps = prepare("INSERT INTO parts(question_id, part) VALUES(?, ?)")){
+            ps.setInt(1, qId);
+            ps.setBytes(2, image);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not add part", ex);
+        }
     }
 
     @Override
     public void updatePart(int id, String text) throws DataAccessException {
-        //TODO: implement
+        try (PreparedStatement ps = prepare("UPDATE parts SET part = ? WHERE part_id = ?")) {
+            ps.setString(1, text);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not update part", ex);
+        }
     }
 
     @Override
-    public void removePart(int id) throws DataAccessException {
-        //TODO: implement
+    public void removeParts(int qId) throws DataAccessException {
+        try(PreparedStatement ps = prepare("DELETE FROM parts WHERE question_id = ?")) {
+            ps.setInt(1, qId);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not remove parts", ex);
+        }
     }
 
     @Override

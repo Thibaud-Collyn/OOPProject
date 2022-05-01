@@ -13,7 +13,10 @@ public interface QuestionsDAO {
     Question createQuestion(String title, String textPart, byte[] imagePart, String questionType, String correctAnswer) throws DataAccessException;
 
 //    Update een bestaande vraag met bepaalde question_id
-    void updateQuestion(int id, String title, String textPart, byte[] imagePart, String correctAnswer) throws DataAccessException;
+    void updateGeneralQuestion(int id, String title, String textPart, byte[] imagePart) throws DataAccessException;
+
+//    Üpdate het juiste antwoord van vraag met bepaalde question_id
+    void updateCorrectAnswer(int qId, String correctAnswer) throws DataAccessException;
 
 //    Verwijdert een bestaande vraag met bepaalde question_id
     void removeQuestion(int id) throws DataAccessException;

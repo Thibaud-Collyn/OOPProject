@@ -21,8 +21,27 @@ public class JDBCQuestionsDAO extends JDBCAbstractDAO implements QuestionsDAO{
     }
 
     @Override
-    public void updateQuestion(int id, String title, String textPart, byte[] imagePart, String correctAnswer) throws DataAccessException {
-        //TODO: implement
+    public void updateGeneralQuestion(int id, String title, String textPart, byte[] imagePart) throws DataAccessException {
+        try (PreparedStatement ps = prepare("UPDATE questions SET title = ?, text_part = ?, image_part = ? WHERE question_id = ?")){
+            ps.setString(1, title);
+            ps.setString(2, textPart);
+            ps.setBytes(3, imagePart);
+            ps.setInt(4, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not remove question.", ex);
+        }
+    }
+
+    @Override
+    public void updateCorrectAnswer(int qId, String correctAnswer) throws DataAccessException {
+        try (PreparedStatement ps = prepare("UPDATE questions SET correct_answer = ? WHERE question_id = ?")){
+            ps.setString(1, correctAnswer);
+            ps.setInt(2, qId);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not remove question.", ex);
+        }
     }
 
     @Override
