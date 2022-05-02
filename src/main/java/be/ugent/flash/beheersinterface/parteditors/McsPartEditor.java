@@ -6,56 +6,71 @@ import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
 public class McsPartEditor extends PartEditor{
-    private ArrayList<Part> parts;
+    protected ArrayList<Part> parts;
     private ArrayList<TextArea> newParts = new ArrayList<>();
     protected ArrayList<CheckBox> correctAnswers = new ArrayList<>();
+
+    protected VBox vBox;
 
     public McsPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
         super(question, dap, qEditorBox);
         parts = dap.getDataAccessContext().getPartsDAO().getParts(question.questionId());
+        for(Part part: parts) {
+            newParts.add(new TextArea(part.part()));
+            CheckBox checkBox = new CheckBox();
+            setCorrect(checkBox, part);
+            correctAnswers.add(checkBox);
+        }
+    }
+
+//    Hulpmethode om checkbox te checken volgens het juiste antwoord van een Mcs, Mcc vraag(wordt overschreven in Mr omwille van ander soort juist antwoord)
+    public void setCorrect(CheckBox checkBox, Part part) {
+        checkBox.setSelected(currentQuestion.correctAnswer().equals(parts.indexOf(part) + ""));
     }
 
 //    Laad alle parts in die op moment van opvragen aan de vraag gekoppeld zijn
     @Override
     public void loadParts() {
-        VBox vBox = new VBox( new ScrollPane(gridPane));
+        Label label = new Label(labels.get(currentQuestion.questionType()));
+        label.setFont(new Font(10));
+        label.setTextFill(Color.GREY);
+        vBox = new VBox( label, new ScrollPane(gridPane));
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.setSpacing(10);
         TitledPane partBox = new TitledPane("Mogelijke antwoorden", vBox);
         partBox.setCollapsible(false);
-        for(int c = 0; c < parts.size(); c++) {
-            CheckBox cb = new CheckBox();
-            setChecked(cb, c);
-            correctAnswers.add(cb);
-            TextArea text = new TextArea(parts.get(c).part());
-            text.setWrapText(true);
-            text.setPrefHeight(20);
-            Button button = new Button("X");
-            button.setOnAction((e) -> removePart(button, text, cb));
-            gridPane.add(cb, 0, c);
-            gridPane.add(text, 1, c);
-            gridPane.add(button, 2, c);
-            newParts.add(text);
-        }
+        loadGP();
         Button addPartBtn = new Button("Optie toevoegen");
         addPartBtn.setOnAction(this::addPart);
         vBox.getChildren().add(addPartBtn);
         qEditorBox.getChildren().add(partBox);
     }
 
-//    hulpmethode om de juiste antwoorden te initialiseren(wordt apart geschreven zodat deze overschreven kan worden voor mr vraag)
-    public void setChecked(CheckBox checkBox, int c) {
-        checkBox.setSelected(currentQuestion.correctAnswer().equals(c+""));
+//    initialiseert de gridpane opnieuw(vooral om lege rows in de gridpane te vermijden)
+    public void loadGP() {
+        gridPane.getChildren().clear();
+        for(int c = 0; c < newParts.size(); c++) {
+            TextArea text = newParts.get(c);
+            text.setWrapText(true);
+            text.setPrefHeight(20);
+            Button button = new Button("X");
+            CheckBox checkBox = correctAnswers.get(c);
+            button.setOnAction((e) -> removePart(button, text, checkBox));
+            gridPane.add(checkBox, 0, c);
+            gridPane.add(text, 1, c);
+            gridPane.add(button, 2, c);
+        }
     }
 
+//    Voegt een lege part toe aan de editor
     public void addPart(ActionEvent event) {
         int row = gridPane.getRowCount();
         CheckBox cB = new CheckBox();
@@ -71,14 +86,17 @@ public class McsPartEditor extends PartEditor{
         newParts.add(text);
     }
 
+//    Verwijdert een part van de editor
     public void removePart(Button button, TextArea text, CheckBox cB) {
         gridPane.getChildren().remove(button);
         gridPane.getChildren().remove(text);
         gridPane.getChildren().remove(cB);
         newParts.remove(text);
         correctAnswers.remove(cB);
+        loadGP();
     }
 
+//    Slaat alle parts die zich op dat moment in de editor bevinden op in de databank
     @Override
     public void saveParts() {
         try {
@@ -92,6 +110,7 @@ public class McsPartEditor extends PartEditor{
         }
     }
 
+//    Geeft het huidige juiste antwoord terug en gooit een exception als het antwoord type fout is
     @Override
     public String getCorrectAnswer() {
         String correctAnswer = "";
@@ -105,8 +124,7 @@ public class McsPartEditor extends PartEditor{
         if (answers == 1) {
             return correctAnswer;
         } else {
-//            TODO: throw error
-            throw new IllegalArgumentException("Only one answer may be selected");
+            throw new IllegalArgumentException("Er moet precies 1 antwoord juist zijn");
         }
     }
 }

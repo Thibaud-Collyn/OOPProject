@@ -12,50 +12,40 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 public class MccPartEditor extends McsPartEditor {
-    private ArrayList<Part> parts;
-    private ArrayList<TextField> newParts;
+    private ArrayList<TextField> newParts = new ArrayList<>();
 
     public MccPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
         super(question, dap, qEditorBox);
-        parts = dap.getDataAccessContext().getPartsDAO().getParts(question.questionId());
-        newParts = new ArrayList<>();
+        for(Part part: parts) {
+            newParts.add(new TextField(part.part()));
+        }
     }
 
     @Override
-    public void loadParts() {
-        VBox vBox = new VBox(new ScrollPane(gridPane));
-        vBox.setAlignment(Pos.CENTER_LEFT);
-        vBox.setSpacing(10);
-        TitledPane partBox = new TitledPane("Mogelijke antwoorden", vBox);
-        partBox.setCollapsible(false);
-        for(int c = 0; c < parts.size(); c++) {
-            CheckBox cb = new CheckBox();
-            cb.setSelected(currentQuestion.correctAnswer().equals(c+""));
-            correctAnswers.add(cb);
-            TextField text = new TextField(parts.get(c).part());
+    public void loadGP() {
+        gridPane.getChildren().clear();
+        for(int c = 0; c < newParts.size(); c++) {
+            TextField text = newParts.get(c);
             text.setPrefHeight(20);
             text.setPrefWidth(90);
             Button button = new Button("X");
-            button.setOnAction((e) -> removeCompactPart(button, text, cb));
-            gridPane.add(cb, 0, c);
+            CheckBox checkBox = correctAnswers.get(c);
+            button.setOnAction((e) -> removeCompactPart(button, text, checkBox));
+            gridPane.add(checkBox, 0, c);
             gridPane.add(text, 1, c);
             gridPane.add(button, 2, c);
-            newParts.add(text);
         }
-        Button addPartBtn = new Button("Optie toevoegen");
-        addPartBtn.setOnAction(this::addPart);
-        vBox.getChildren().add(addPartBtn);
-        qEditorBox.getChildren().add(partBox);
     }
 
     @Override
     public void addPart(ActionEvent event) {
         int row = gridPane.getRowCount();
         CheckBox cB = new CheckBox();
+        correctAnswers.add(cB);
         gridPane.add(cB, 0, row);
         TextField text = new TextField();
         text.setPrefHeight(20);
-        text.setPrefWidth(75);
+        text.setPrefWidth(90);
         gridPane.add(text, 1, row);
         Button button = new Button("X");
         button.setOnAction((e) -> removeCompactPart(button, text, cB));
@@ -68,6 +58,8 @@ public class MccPartEditor extends McsPartEditor {
         gridPane.getChildren().remove(text);
         gridPane.getChildren().remove(cB);
         newParts.remove(text);
+        correctAnswers.remove(cB);
+        loadGP();
     }
 
     @Override

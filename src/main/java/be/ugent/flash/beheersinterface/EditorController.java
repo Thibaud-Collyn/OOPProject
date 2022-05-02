@@ -44,6 +44,7 @@ public class EditorController extends StartScreenController {
                                                         "openi", "Open (geheel)");
     private final Map<String, PartEditorFactory> partFactories = Map.of("mcs", new McsPartEditorFactory(),
                                                                         "mcc", new MccPartEditorFactory(),
+                                                                        "mci", new MciPartEditorFactory(),
                                                                         "mr", new MrPartEditorFactory(),
                                                                         "open", new OpenPartEditorFactory(),
                                                                         "openi", new OpenIPartEditorFactory());
@@ -130,6 +131,7 @@ public class EditorController extends StartScreenController {
         partEditor.loadParts();
     }
 
+//    opent een algemene image file chooser
     public void chooseImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies afbeelding");
@@ -146,6 +148,7 @@ public class EditorController extends StartScreenController {
         }
     }
 
+//    Hulpmethode om tableView te de-activeren als een image veranderd wordt
     public boolean imageCheck() {
         if(imageBox == null) {
             return true;
@@ -189,7 +192,7 @@ public class EditorController extends StartScreenController {
 
 //    verwijder geselecteerde vraag en laad de db opnieuw in
     public void removeQuestion(ActionEvent event) throws DataAccessException {
-//        TODO: remove parts if necessary
+        dataAccessProvider.getDataAccessContext().getPartsDAO().removeParts(currentQuestion.questionId());
         dataAccessProvider.getDataAccessContext().getQuestionsDAO().removeQuestion(currentQuestion.questionId());
         initialize();
     }
@@ -204,10 +207,14 @@ public class EditorController extends StartScreenController {
     }
 
     public void updateQuestion() throws DataAccessException {
-        currentQuestion = new Question(currentQuestion.questionId(), title.getText(), qText.getText(), (byte[]) imageBox.getUserData(), currentQuestion.questionType(), partEditor.getCorrectAnswer());
-        partEditor.saveParts();
-//        TODO: catch update error and show error pop up
-        dataAccessProvider.getDataAccessContext().getQuestionsDAO().updateGeneralQuestion(currentQuestion.questionId(), currentQuestion.title(), currentQuestion.textPart(), currentQuestion.imagePart());
-        initialize();
+        try {
+            currentQuestion = new Question(currentQuestion.questionId(), title.getText(), qText.getText(), (byte[]) imageBox.getUserData(), currentQuestion.questionType(), partEditor.getCorrectAnswer());
+            partEditor.saveParts();
+            dataAccessProvider.getDataAccessContext().getQuestionsDAO().updateGeneralQuestion(currentQuestion.questionId(), currentQuestion.title(), currentQuestion.textPart(), currentQuestion.imagePart());
+            initialize();
+        } catch (IllegalArgumentException e) {
+            ErrorPopUp popUp = new ErrorPopUp();
+            popUp.display(e.getMessage());
+        }
     }
 }

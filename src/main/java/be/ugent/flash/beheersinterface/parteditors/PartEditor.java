@@ -8,10 +8,19 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class PartEditor {
     protected VBox qEditorBox;
     protected Question currentQuestion;
     protected DataAccessProvider dap;
+    protected final Map<String, String> labels = Map.of("mcs", "Antwoorden worden onder elkaar getoond - met knoppen A, B, C,...",
+                                                                        "mcc", "Antwoorden worden op knoppen naast elkaar getoond.",
+                                                                        "mr", "Antwoorden worden onder elkaar getoond met aanvink knop.",
+                                                                        "mci", "Antwoorden worden als foto's op knoppen afgebeeld(dubbel klik op een afbeelding om hem te veranderen).");
+
     protected GridPane gridPane;
 
     public PartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) {

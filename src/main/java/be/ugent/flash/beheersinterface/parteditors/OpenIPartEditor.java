@@ -9,12 +9,13 @@ public class OpenIPartEditor extends OpenPartEditor {
         super(question, dap, qEditorBox);
     }
 
+//    Geeft het huidige juiste antwoord terug en gooit een exception als het antwoord type fout is
     @Override
     public String getCorrectAnswer() {
         if ((! text.getText().equals("")) && text.getText().matches("^-?[0-9]+$")) {
             return text.getText();
         } else {
-            throw new IllegalArgumentException("Answer must be a integer");
+            throw new IllegalArgumentException("Het antwoord moet een geheel getal zijn");
         }
     }
 }

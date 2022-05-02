@@ -15,6 +15,7 @@ public class OpenPartEditor extends PartEditor {
         super(question, dap, qEditorBox);
     }
 
+//    Laad text area met huidig correct antwoord in
     @Override
     public void loadParts() {
         text = new TextArea(currentQuestion.correctAnswer());
@@ -26,6 +27,7 @@ public class OpenPartEditor extends PartEditor {
         qEditorBox.getChildren().add(gridPane);
     }
 
+//    Slaat het gegeven juiste antwoord op in de databank
     @Override
     public void saveParts() {
         try {
@@ -35,12 +37,13 @@ public class OpenPartEditor extends PartEditor {
         }
     }
 
+//    Geeft het huidige juiste antwoord terug en gooit een exception als het antwoord type fout is
     @Override
     public String getCorrectAnswer() {
         if (!text.getText().equals("")) {
             return text.getText();
         } else {
-            throw new IllegalArgumentException("Answer can't be empty");
+            throw new IllegalArgumentException("Het antwoord mag niet leeg zijn");
         }
     }
 }

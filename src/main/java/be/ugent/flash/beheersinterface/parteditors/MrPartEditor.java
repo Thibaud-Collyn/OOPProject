@@ -1,12 +1,11 @@
 package be.ugent.flash.beheersinterface.parteditors;
 
+import be.ugent.flash.Part;
 import be.ugent.flash.Question;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
-
-import java.util.HashMap;
 
 public class MrPartEditor extends McsPartEditor{
 
@@ -15,10 +14,11 @@ public class MrPartEditor extends McsPartEditor{
     }
 
     @Override
-    public void setChecked(CheckBox checkBox, int c) {
-        checkBox.setSelected(currentQuestion.correctAnswer().charAt(c) == 'T');
+    public void setCorrect(CheckBox checkBox, Part part) {
+        checkBox.setSelected(currentQuestion.correctAnswer().charAt(parts.indexOf(part)) == 'T');
     }
 
+//    Geeft het huidige juiste antwoord terug en gooit een exception als het antwoord type fout is
     @Override
     public String getCorrectAnswer() {
         StringBuilder correctAnswer = new StringBuilder();
@@ -29,7 +29,7 @@ public class MrPartEditor extends McsPartEditor{
             return correctAnswer.toString();
         } else {
 //            TODO: throw error
-            throw new IllegalArgumentException("At least one answer must be selected");
+            throw new IllegalArgumentException("Er moet minstens 1 juist antwoord zijn");
         }
     }
 }
