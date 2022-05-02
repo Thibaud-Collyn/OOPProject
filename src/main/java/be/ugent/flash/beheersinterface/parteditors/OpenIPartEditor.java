@@ -14,7 +14,7 @@ public class OpenIPartEditor extends OpenPartEditor {
         if ((! text.getText().equals("")) && text.getText().matches("^-?[0-9]+$")) {
             return text.getText();
         } else {
-            throw new RuntimeException("Answer must be a integer");
+            throw new IllegalArgumentException("Answer must be a integer");
         }
     }
 }

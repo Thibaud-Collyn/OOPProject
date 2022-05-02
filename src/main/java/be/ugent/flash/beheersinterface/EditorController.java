@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -43,6 +44,7 @@ public class EditorController extends StartScreenController {
                                                         "openi", "Open (geheel)");
     private final Map<String, PartEditorFactory> partFactories = Map.of("mcs", new McsPartEditorFactory(),
                                                                         "mcc", new MccPartEditorFactory(),
+                                                                        "mr", new MrPartEditorFactory(),
                                                                         "open", new OpenPartEditorFactory(),
                                                                         "openi", new OpenIPartEditorFactory());
 
@@ -94,6 +96,7 @@ public class EditorController extends StartScreenController {
         currentQuestion = question;
         removeQuestionButton.setDisable(false);
         generalItems = new GridPane();
+        generalItems.setPadding(new Insets(10, 10, 10, 10));
         generalItems.setHgap(10);
         generalItems.setVgap(10);
         generalItems.add(new Label("Titel"),0, 0);
@@ -111,8 +114,8 @@ public class EditorController extends StartScreenController {
         imageBox = new HBox();
         imageBox.setSpacing(10);
         image = new ImageView();
-        image.setFitHeight(200);
-        image.setFitWidth(200);
+        image.setFitHeight(125);
+        image.setFitWidth(125);
         image.setPreserveRatio(true);
         if(question.imagePart() == null) {
             buttonReset(true);

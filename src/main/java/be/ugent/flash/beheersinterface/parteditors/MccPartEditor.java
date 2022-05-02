@@ -23,7 +23,7 @@ public class MccPartEditor extends McsPartEditor {
 
     @Override
     public void loadParts() {
-        VBox vBox = new VBox(gridPane);
+        VBox vBox = new VBox(new ScrollPane(gridPane));
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.setSpacing(10);
         TitledPane partBox = new TitledPane("Mogelijke antwoorden", vBox);
@@ -31,9 +31,10 @@ public class MccPartEditor extends McsPartEditor {
         for(int c = 0; c < parts.size(); c++) {
             CheckBox cb = new CheckBox();
             cb.setSelected(currentQuestion.correctAnswer().equals(c+""));
+            correctAnswers.add(cb);
             TextField text = new TextField(parts.get(c).part());
             text.setPrefHeight(20);
-            text.setPrefWidth(75);
+            text.setPrefWidth(90);
             Button button = new Button("X");
             button.setOnAction((e) -> removeCompactPart(button, text, cb));
             gridPane.add(cb, 0, c);

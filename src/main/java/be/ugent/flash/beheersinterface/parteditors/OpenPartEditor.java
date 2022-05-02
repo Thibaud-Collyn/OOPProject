@@ -40,7 +40,7 @@ public class OpenPartEditor extends PartEditor {
         if (!text.getText().equals("")) {
             return text.getText();
         } else {
-            throw new RuntimeException("Answer can't be empty");
+            throw new IllegalArgumentException("Answer can't be empty");
         }
     }
 }
