@@ -19,9 +19,12 @@ import javafx.stage.FileChooser;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class MciPartEditor extends PartEditor{
     private ArrayList<ImageView> newParts = new ArrayList<>();
@@ -92,8 +95,25 @@ public class MciPartEditor extends PartEditor{
         CheckBox cB = new CheckBox();
         correctAnswers.add(cB);
         gridPane.add(cB, 0, row);
-        ImageView imageView = new ImageView("Kies afbeelding");
-//        TODO: add temp image and set userData
+        ImageView imageView = new ImageView();
+        InputStream is = getClass().getResourceAsStream("/new_part_temp.png");
+        try {
+            byte[] bytes = is.readAllBytes();
+            imageView.setImage(new Image(new ByteArrayInputStream(bytes)));
+            imageView.setUserData(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        imageView.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+                if(mouseEvent.getButton() == MouseButton.PRIMARY){
+                    if(mouseEvent.getClickCount() == 2) {
+                        changeImage(imageView);
+                    }
+                }
+            }
+        });
         imageView.setFitWidth(90);
         imageView.setFitWidth(90);
         imageView.setPreserveRatio(true);
