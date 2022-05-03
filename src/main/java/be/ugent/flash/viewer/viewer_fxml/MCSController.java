@@ -19,8 +19,8 @@ public class MCSController extends AbstractController {
 
     private ArrayList<Part> parts;
 
-    public MCSController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect);
+    public MCSController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
         try {
             parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
         } catch (DataAccessException e) {

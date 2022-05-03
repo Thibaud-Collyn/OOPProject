@@ -8,7 +8,7 @@ import be.ugent.flash.viewer.viewer_fxml.MCCController;
 
 public class MCCControllerFactory implements ControllerFactory{
     @Override
-    public AbstractController getController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
-        return new MCCController(question, dataAccessProvider, viewerManager, wasCorrect);
+    public AbstractController getController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+        return new MCCController(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
     }
 }

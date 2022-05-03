@@ -20,8 +20,8 @@ public class MCIController extends AbstractController{
 
     private ArrayList<ImagePart> parts;
 
-    public MCIController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect);
+    public MCIController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
         try {
             parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getImageParts(question.questionId());
         } catch (DataAccessException e) {

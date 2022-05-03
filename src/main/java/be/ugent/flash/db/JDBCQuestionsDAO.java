@@ -16,8 +16,17 @@ public class JDBCQuestionsDAO extends JDBCAbstractDAO implements QuestionsDAO{
 
     @Override
     public Question createQuestion(String title, String textPart, byte[] imagePart, String questionType, String correctAnswer) throws DataAccessException {
-        //TODO: implement
-        return null;
+        try (PreparedStatement ps = prepare("INSERT INTO questions(title, text_part, image_part, question_type, correct_answer) VALUES (?, ?, ?, ?, ?)")){
+            ps.setString(1, title);
+            ps.setString(2, textPart);
+            ps.setBytes(3, imagePart);
+            ps.setString(4, questionType);
+            ps.setString(5, correctAnswer);
+            ps.executeUpdate();
+            return getQuestion(ps.getGeneratedKeys().getInt(1));
+        } catch (SQLException ex) {
+            throw new DataAccessException("Could not remove question.", ex);
+        }
     }
 
     @Override
@@ -54,7 +63,6 @@ public class JDBCQuestionsDAO extends JDBCAbstractDAO implements QuestionsDAO{
         }
     }
 
-    //TODO: getQuestion might not be necessary, implementation not yet complete
     @Override
     public Question getQuestion(int id) throws DataAccessException {
         try (PreparedStatement ps = prepare("SELECT title, text_part, image_part, question_type, correct_answer FROM questions WHERE question_id = ?")) {

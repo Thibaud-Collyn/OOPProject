@@ -8,7 +8,7 @@ import be.ugent.flash.viewer.viewer_fxml.MRController;
 
 public class MRControllerFactory implements ControllerFactory{
     @Override
-    public AbstractController getController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
-        return new MRController(question, dataAccessProvider, viewerManager, wasCorrect);
+    public AbstractController getController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+        return new MRController(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
     }
 }

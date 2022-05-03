@@ -1,11 +1,8 @@
 package be.ugent.flash.db;
 
 import be.ugent.flash.Question;
-import java.sql.SQLException;
 
-import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.Queue;
 
 public interface QuestionsDAO {
 

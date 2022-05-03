@@ -7,5 +7,5 @@ import be.ugent.flash.viewer.viewer_fxml.AbstractController;
 
 //  Algemene controller klasse
 public interface ControllerFactory {
-    AbstractController getController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect);
+    AbstractController getController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview);
 }

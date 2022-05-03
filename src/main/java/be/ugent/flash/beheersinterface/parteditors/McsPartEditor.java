@@ -23,6 +23,10 @@ public class McsPartEditor extends PartEditor{
     public McsPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
         super(question, dap, qEditorBox);
         parts = dap.getDataAccessContext().getPartsDAO().getParts(question.questionId());
+        if(parts.isEmpty()) { //Laad de vragen lijst opnieuw in met een lege vraag(voor nieuw toegevoegde vragen)
+            dap.getDataAccessContext().getPartsDAO().addTextPart(question.questionId(), "");
+            parts = dap.getDataAccessContext().getPartsDAO().getParts(question.questionId());
+        }
         for(Part part: parts) {
             newParts.add(new TextArea(part.part()));
             CheckBox checkBox = new CheckBox();

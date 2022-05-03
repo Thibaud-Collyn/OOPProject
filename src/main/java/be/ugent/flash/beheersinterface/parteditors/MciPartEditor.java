@@ -35,6 +35,15 @@ public class MciPartEditor extends PartEditor{
     public MciPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
         super(question, dap, qEditorBox);
         ArrayList<ImagePart> parts = dap.getDataAccessContext().getPartsDAO().getImageParts(currentQuestion.questionId());
+        if (parts.isEmpty()) {//Laad de vragen lijst opnieuw in met een lege vraag(voor nieuw toegevoegde vragen)
+            InputStream is = getClass().getResourceAsStream("/new_part_temp.png");
+            try {
+                dap.getDataAccessContext().getPartsDAO().addImagePart(question.questionId(), is.readAllBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            parts = dap.getDataAccessContext().getPartsDAO().getImageParts(question.questionId());
+        }
         for (ImagePart part: parts) {
             ImageView imageView = new ImageView(new Image(new ByteArrayInputStream(part.part())));
             imageView.setUserData(part.part());

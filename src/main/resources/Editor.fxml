@@ -44,7 +44,7 @@
          <children>
             <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="270.0" spacing="10.0">
                <children>
-                  <Button fx:id="addQuestionButton" mnemonicParsing="false" text="Vraag Toevoegen" />
+                  <Button fx:id="addQuestionButton" mnemonicParsing="false" onAction="#addQuestion" text="Vraag Toevoegen" />
                   <Button fx:id="removeQuestionButton" mnemonicParsing="false" onAction="#removeQuestion" text="Vraag verwijderen" />
                </children>
             </HBox>

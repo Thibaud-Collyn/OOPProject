@@ -5,8 +5,8 @@ import be.ugent.flash.viewer.ViewerManager;
 import be.ugent.flash.db.DataAccessProvider;
 
 public class OpenIController extends OpenController{
-    public OpenIController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect);
+    public OpenIController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
     }
 
     @Override

@@ -22,8 +22,8 @@ public class MRController extends AbstractController{
     private ArrayList<Part> parts;
     private char[] allAnswers;
 
-    public MRController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect);
+    public MRController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
         try {
             parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
             allAnswers = new char[parts.size()];
@@ -38,7 +38,7 @@ public class MRController extends AbstractController{
         super.initialize();
         for(int i = 0; i < parts.size(); i++) {
             CheckBox checkBox = new CheckBox();
-            checkBox.setUserData((int) i);
+            checkBox.setUserData(i);
             checkBox.setOnAction(this::addAnswer);
             partBox.add(checkBox, 0, i);
             partBox.add(new TextFlow(new Text(parts.get(i).part())), 1, i);

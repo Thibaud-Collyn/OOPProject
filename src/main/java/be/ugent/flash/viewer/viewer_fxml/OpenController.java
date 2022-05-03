@@ -14,8 +14,8 @@ public class OpenController extends AbstractController{
     public TextField text;
     public Label error;
 
-    public OpenController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect);
+    public OpenController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
     }
 
     @Override

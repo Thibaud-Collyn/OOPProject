@@ -27,11 +27,12 @@ public abstract class AbstractController {
     protected ViewerManager viewerManager;
     protected boolean wasCorrect;
 
-    public AbstractController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect) {
+    public AbstractController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
         this.question = question;
         this.dataAccessProvider = dataAccessProvider;
         this.wasCorrect = wasCorrect;
         this.viewerManager = viewerManager;
+        this.card.getChildren().forEach((x) -> card.setDisable(isPreview));
     }
 
     public void initialize() {

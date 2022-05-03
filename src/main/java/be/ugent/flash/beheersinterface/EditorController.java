@@ -70,6 +70,10 @@ public class EditorController extends StartScreenController {
         dataAccessProvider = new JDBCDataAccessProvider("jdbc:sqlite:" + selectedDB.getPath());
     }
 
+    public DataAccessProvider getDataAccessProvider(){
+        return dataAccessProvider;
+    }
+
 //    laad de tableView in op basis van de huidige status van de db()
     public void initialize() throws DataAccessException {
         questionTable.disableProperty().bind(Bindings.createBooleanBinding(() -> !imageCheck()));
@@ -198,7 +202,10 @@ public class EditorController extends StartScreenController {
     }
 
     public void addQuestion(ActionEvent event) {
-        //TODO: implement
+        AddQuestionPopUp popUp = new AddQuestionPopUp(this);
+        popUp.initialise();
+        questionTable.getSelectionModel().select(null);
+        currentQuestion = null;
     }
 
 //    Maakt alle aanpassingen op de huidige vraag ongedaan als die nog niet opgeslagen is.
@@ -206,12 +213,14 @@ public class EditorController extends StartScreenController {
         generalEditor(currentQuestion);
     }
 
+//    Update een bestaande vraag en laad die ge-update vraag meteen in
     public void updateQuestion() throws DataAccessException {
         try {
             currentQuestion = new Question(currentQuestion.questionId(), title.getText(), qText.getText(), (byte[]) imageBox.getUserData(), currentQuestion.questionType(), partEditor.getCorrectAnswer());
             partEditor.saveParts();
             dataAccessProvider.getDataAccessContext().getQuestionsDAO().updateGeneralQuestion(currentQuestion.questionId(), currentQuestion.title(), currentQuestion.textPart(), currentQuestion.imagePart());
             initialize();
+            questionTable.getSelectionModel().select(currentQuestion);
         } catch (IllegalArgumentException e) {
             ErrorPopUp popUp = new ErrorPopUp();
             popUp.display(e.getMessage());
