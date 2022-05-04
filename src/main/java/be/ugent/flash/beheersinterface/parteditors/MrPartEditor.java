@@ -2,6 +2,7 @@ package be.ugent.flash.beheersinterface.parteditors;
 
 import be.ugent.flash.Part;
 import be.ugent.flash.Question;
+import be.ugent.flash.beheersinterface.EditorController;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.scene.control.CheckBox;
@@ -9,8 +10,8 @@ import javafx.scene.layout.VBox;
 
 public class MrPartEditor extends McsPartEditor{
 
-    public MrPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
-        super(question, dap, qEditorBox);
+    public MrPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox, EditorController editorController) throws DataAccessException {
+        super(question, dap, qEditorBox, editorController);
     }
 
     @Override

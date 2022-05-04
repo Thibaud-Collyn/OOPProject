@@ -147,7 +147,7 @@ public class EditorController extends StartScreenController {
         }
         generalItems.add(imageBox, 1, 3);
         QEditorBox.getChildren().add(generalItems);
-        partEditor = partFactories.get(currentQuestion.questionType()).getPartEditor(currentQuestion, dataAccessProvider, QEditorBox);
+        partEditor = partFactories.get(currentQuestion.questionType()).getPartEditor(currentQuestion, dataAccessProvider, QEditorBox, this);
         partEditor.loadParts();
         title.setOnKeyTyped((e) -> questionChanged(true));
         qText.setOnKeyTyped((e) -> questionChanged(true));

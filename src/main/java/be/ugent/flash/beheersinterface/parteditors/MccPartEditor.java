@@ -2,6 +2,7 @@ package be.ugent.flash.beheersinterface.parteditors;
 
 import be.ugent.flash.Part;
 import be.ugent.flash.Question;
+import be.ugent.flash.beheersinterface.EditorController;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.event.ActionEvent;
@@ -14,8 +15,8 @@ import java.util.ArrayList;
 public class MccPartEditor extends McsPartEditor {
     private ArrayList<TextField> newParts = new ArrayList<>();
 
-    public MccPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
-        super(question, dap, qEditorBox);
+    public MccPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox, EditorController editorController) throws DataAccessException {
+        super(question, dap, qEditorBox, editorController);
         for(Part part: parts) {
             newParts.add(new TextField(part.part()));
         }
@@ -28,13 +29,24 @@ public class MccPartEditor extends McsPartEditor {
             TextField text = newParts.get(c);
             text.setPrefHeight(20);
             text.setPrefWidth(90);
+            text.setOnKeyTyped((e) -> editorController.questionChanged(true));
             Button button = new Button("X");
             CheckBox checkBox = correctAnswers.get(c);
+            checkBox.setOnAction((e) -> editorController.questionChanged(true));
             button.setOnAction((e) -> removeCompactPart(button, text, checkBox));
             gridPane.add(checkBox, 0, c);
             gridPane.add(text, 1, c);
             gridPane.add(button, 2, c);
         }
+    }
+
+    @Override
+    public ArrayList<?> getParts() {
+        ArrayList<Part> currentParts = new ArrayList<>();
+        for(int c = 0; c < newParts.size(); c++) {
+            currentParts.add(new Part(c, currentQuestion.questionId(), newParts.get(c).getText()));
+        }
+        return currentParts;
     }
 
     @Override
@@ -51,6 +63,7 @@ public class MccPartEditor extends McsPartEditor {
         button.setOnAction((e) -> removeCompactPart(button, text, cB));
         gridPane.add(button, 2, row);
         newParts.add(text);
+        editorController.questionChanged(true);
     }
 
     public void removeCompactPart(Button button, TextField text, CheckBox cB) {
@@ -60,6 +73,7 @@ public class MccPartEditor extends McsPartEditor {
         newParts.remove(text);
         correctAnswers.remove(cB);
         loadGP();
+        editorController.questionChanged(true);
     }
 
     @Override

@@ -2,6 +2,7 @@ package be.ugent.flash.beheersinterface.parteditors;
 
 import be.ugent.flash.Part;
 import be.ugent.flash.Question;
+import be.ugent.flash.beheersinterface.EditorController;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
+// Grootste verschil met mcs vraag is het initialiseren van textFields i.p.v. textAreas
 public class McsPartEditor extends PartEditor{
     protected ArrayList<Part> parts;
     private ArrayList<TextArea> newParts = new ArrayList<>();
@@ -20,8 +22,8 @@ public class McsPartEditor extends PartEditor{
 
     protected VBox vBox;
 
-    public McsPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
-        super(question, dap, qEditorBox);
+    public McsPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox, EditorController editorController) throws DataAccessException {
+        super(question, dap, qEditorBox, editorController);
         parts = dap.getDataAccessContext().getPartsDAO().getParts(question.questionId());
         if(parts.isEmpty()) { //Laad de vragen lijst opnieuw in met een lege vraag(voor nieuw toegevoegde vragen)
             dap.getDataAccessContext().getPartsDAO().addTextPart(question.questionId(), "");
@@ -65,8 +67,10 @@ public class McsPartEditor extends PartEditor{
             TextArea text = newParts.get(c);
             text.setWrapText(true);
             text.setPrefHeight(20);
+            text.setOnKeyTyped((e) -> editorController.questionChanged(true));
             Button button = new Button("X");
             CheckBox checkBox = correctAnswers.get(c);
+            checkBox.setOnAction((e) -> editorController.questionChanged(true));
             button.setOnAction((e) -> removePart(button, text, checkBox));
             gridPane.add(checkBox, 0, c);
             gridPane.add(text, 1, c);
@@ -88,6 +92,7 @@ public class McsPartEditor extends PartEditor{
         button.setOnAction((e) -> removePart(button, text, cB));
         gridPane.add(button, 2, row);
         newParts.add(text);
+        editorController.questionChanged(true);
     }
 
 //    Verwijdert een part van de editor
@@ -98,15 +103,16 @@ public class McsPartEditor extends PartEditor{
         newParts.remove(text);
         correctAnswers.remove(cB);
         loadGP();
+        editorController.questionChanged(true);
     }
 
     @Override
     public ArrayList<?> getParts() {
-        ArrayList<Part> currentparts = new ArrayList<>();
+        ArrayList<Part> currentParts = new ArrayList<>();
         for(int c = 0; c < newParts.size(); c++) {
-            currentparts.add(new Part(c, currentQuestion.questionId(), newParts.get(c).getText()));
+            currentParts.add(new Part(c, currentQuestion.questionId(), newParts.get(c).getText()));
         }
-        return currentparts;
+        return currentParts;
     }
 
 //    Slaat alle parts die zich op dat moment in de editor bevinden op in de databank

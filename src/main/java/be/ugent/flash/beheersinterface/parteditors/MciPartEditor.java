@@ -3,6 +3,7 @@ package be.ugent.flash.beheersinterface.parteditors;
 import be.ugent.flash.ImagePart;
 import be.ugent.flash.Part;
 import be.ugent.flash.Question;
+import be.ugent.flash.beheersinterface.EditorController;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.event.ActionEvent;
@@ -33,8 +34,8 @@ public class MciPartEditor extends PartEditor{
 
     public VBox vBox;
 
-    public MciPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) throws DataAccessException {
-        super(question, dap, qEditorBox);
+    public MciPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox, EditorController editorController) throws DataAccessException {
+        super(question, dap, qEditorBox, editorController);
         ArrayList<ImagePart> parts = dap.getDataAccessContext().getPartsDAO().getImageParts(currentQuestion.questionId());
         if (parts.isEmpty()) {//Laad de vragen lijst opnieuw in met een lege vraag(voor nieuw toegevoegde vragen)
             InputStream is = getClass().getResourceAsStream("/new_part_temp.png");
@@ -64,6 +65,7 @@ public class MciPartEditor extends PartEditor{
             newParts.add(imageView);
             CheckBox cB = new CheckBox();
             cB.setSelected(currentQuestion.correctAnswer().equals(parts.indexOf(part) + ""));
+            cB.setOnAction((e) -> editorController.questionChanged(true));
             correctAnswers.add(cB);
         }
     }
@@ -72,6 +74,7 @@ public class MciPartEditor extends PartEditor{
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies afbeelding");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("jpg afbeelding", "*.jpg"), new FileChooser.ExtensionFilter("jpeg afbeelding", "*.jpeg"), new FileChooser.ExtensionFilter("png afbeelding", "*.png"));
+        editorController.questionChanged(true);
         File newImage = fileChooser.showOpenDialog(qEditorBox.getScene().getWindow());
         if (newImage != null){
             try {
@@ -132,6 +135,7 @@ public class MciPartEditor extends PartEditor{
         button.setOnAction((e) -> removePart(button, imageView, cB));
         gridPane.add(button, 2, row);
         newParts.add(imageView);
+        editorController.questionChanged(true);
     }
 
     public void removePart(Button button, ImageView imageView, CheckBox cB) {
@@ -141,6 +145,7 @@ public class MciPartEditor extends PartEditor{
         newParts.remove(imageView);
         correctAnswers.remove(cB);
         loadGP();
+        editorController.questionChanged(true);
     }
 
     public void loadGP() {
@@ -152,6 +157,7 @@ public class MciPartEditor extends PartEditor{
             imageView.setPreserveRatio(true);
             Button button = new Button("X");
             CheckBox checkBox = correctAnswers.get(c);
+            checkBox.setOnAction((e) -> editorController.questionChanged(true));
             button.setOnAction((e) -> removePart(button, imageView, checkBox));
             gridPane.add(checkBox, 0, c);
             gridPane.add(imageView, 1, c);

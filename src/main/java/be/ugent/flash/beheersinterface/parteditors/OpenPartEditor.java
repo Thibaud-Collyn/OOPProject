@@ -1,6 +1,7 @@
 package be.ugent.flash.beheersinterface.parteditors;
 
 import be.ugent.flash.Question;
+import be.ugent.flash.beheersinterface.EditorController;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import javafx.scene.control.Label;
@@ -11,8 +12,8 @@ import javafx.scene.layout.VBox;
 public class OpenPartEditor extends PartEditor {
     public TextArea text;
 
-    public OpenPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox) {
-        super(question, dap, qEditorBox);
+    public OpenPartEditor(Question question, DataAccessProvider dap, VBox qEditorBox, EditorController editorController) {
+        super(question, dap, qEditorBox, editorController);
     }
 
 //    Laad text area met huidig correct antwoord in
@@ -25,6 +26,7 @@ public class OpenPartEditor extends PartEditor {
         gridPane.add(new Label("Correct antwoord"), 0, 0);
         gridPane.add(text, 1, 0);
         qEditorBox.getChildren().add(gridPane);
+        text.setOnKeyTyped((e) -> editorController.questionChanged(true));
     }
 
 //    Slaat het gegeven juiste antwoord op in de databank
