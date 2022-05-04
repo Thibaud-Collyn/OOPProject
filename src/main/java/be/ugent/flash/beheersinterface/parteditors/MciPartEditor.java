@@ -1,6 +1,7 @@
 package be.ugent.flash.beheersinterface.parteditors;
 
 import be.ugent.flash.ImagePart;
+import be.ugent.flash.Part;
 import be.ugent.flash.Question;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
@@ -156,6 +157,15 @@ public class MciPartEditor extends PartEditor{
             gridPane.add(imageView, 1, c);
             gridPane.add(button, 2, c);
         }
+    }
+
+    @Override
+    public ArrayList<?> getParts() {
+        ArrayList<ImagePart> currentparts = new ArrayList<>();
+        for(int c = 0; c < newParts.size(); c++) {
+            currentparts.add(new ImagePart(c, currentQuestion.questionId(), (byte[]) newParts.get(c).getUserData()));
+        }
+        return currentparts;
     }
 
     @Override

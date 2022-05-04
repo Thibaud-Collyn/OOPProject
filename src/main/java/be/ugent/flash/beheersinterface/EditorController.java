@@ -7,6 +7,8 @@ import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
 import be.ugent.flash.db.JDBCDataAccessProvider;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -48,9 +50,10 @@ public class EditorController extends StartScreenController {
                                                                         "mr", new MrPartEditorFactory(),
                                                                         "open", new OpenPartEditorFactory(),
                                                                         "openi", new OpenIPartEditorFactory());
-
     private PartEditor partEditor;
     private Question currentQuestion = null;
+    private PreviewPopUp previewPopUp;
+    private BooleanProperty wasChanged = new SimpleBooleanProperty(false);
 
     public BorderPane interfaceScreen;
     public TableView<Question> questionTable;
@@ -65,6 +68,8 @@ public class EditorController extends StartScreenController {
     public Button addQuestionButton;
     public Button removeQuestionButton;
     public Button restoreButton;
+    public Button preview;
+    public Button updateQuestionBtn;
 
     public EditorController(File selectedDB) {
         dataAccessProvider = new JDBCDataAccessProvider("jdbc:sqlite:" + selectedDB.getPath());
@@ -76,7 +81,11 @@ public class EditorController extends StartScreenController {
 
 //    laad de tableView in op basis van de huidige status van de db()
     public void initialize() throws DataAccessException {
-        questionTable.disableProperty().bind(Bindings.createBooleanBinding(() -> !imageCheck()));
+//        aantal initiele binds om knoppen te disablen
+        questionTable.disableProperty().bind(wasChanged);
+        restoreButton.disableProperty().bind(wasChanged.not().or(questionTable.getSelectionModel().selectedItemProperty().isNull()));
+        updateQuestionBtn.disableProperty().bind(wasChanged.not().or(questionTable.getSelectionModel().selectedItemProperty().isNull()));
+
         questions = dataAccessProvider.getDataAccessContext().getQuestionsDAO().getAllQuestions();
         noneSelected();
         ObservableList<Question> Oquestions = FXCollections.observableArrayList(questions);
@@ -84,6 +93,13 @@ public class EditorController extends StartScreenController {
         typeColumn.setCellValueFactory(question -> new SimpleStringProperty(fullTypes.get(question.getValue().questionType())));
         questionTable.setItems(Oquestions);
         questionTable.getSelectionModel().selectedItemProperty().addListener(this::showQEditor);
+
+        previewPopUp = new PreviewPopUp();
+        preview.setOnMousePressed(event -> showPreview());
+        preview.setOnMouseReleased(event -> previewPopUp.closePreview());
+        preview.setOnMouseExited(event -> previewPopUp.closePreview());
+        preview.disableProperty().bind(questionTable.getSelectionModel().selectedItemProperty().isNull());
+        questionChanged(false);
     }
 
 //    Veranderd het rechter paneel van de editor op basis van de geselecteerde vraag
@@ -133,6 +149,9 @@ public class EditorController extends StartScreenController {
         QEditorBox.getChildren().add(generalItems);
         partEditor = partFactories.get(currentQuestion.questionType()).getPartEditor(currentQuestion, dataAccessProvider, QEditorBox);
         partEditor.loadParts();
+        title.setOnKeyTyped((e) -> questionChanged(true));
+        qText.setOnKeyTyped((e) -> questionChanged(true));
+        questionChanged(false);
     }
 
 //    opent een algemene image file chooser
@@ -140,6 +159,7 @@ public class EditorController extends StartScreenController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies afbeelding");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("jpg afbeelding", "*.jpg"), new FileChooser.ExtensionFilter("jpeg afbeelding", "*.jpeg"), new FileChooser.ExtensionFilter("png afbeelding", "*.png"));
+        questionChanged(true);
         File newImage = fileChooser.showOpenDialog(interfaceScreen.getScene().getWindow());
         if (newImage != null){
             try {
@@ -151,6 +171,11 @@ public class EditorController extends StartScreenController {
             }
         }
     }
+
+    public void questionChanged(boolean changed) {
+        wasChanged.set(changed);
+    }
+
 
 //    Hulpmethode om tableView te de-activeren als een image veranderd wordt
     public boolean imageCheck() {
@@ -225,5 +250,10 @@ public class EditorController extends StartScreenController {
             ErrorPopUp popUp = new ErrorPopUp();
             popUp.display(e.getMessage());
         }
+    }
+
+    public void showPreview() {
+        Question previewQuestion = new Question(currentQuestion.questionId(), title.getText(), qText.getText(), (byte[]) imageBox.getUserData(), currentQuestion.questionType(), null);
+        previewPopUp.showPreview(previewQuestion, dataAccessProvider, partEditor.getParts());
     }
 }

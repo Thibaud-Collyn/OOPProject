@@ -22,15 +22,19 @@ public class MRController extends AbstractController{
     private ArrayList<Part> parts;
     private char[] allAnswers;
 
-    public MRController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
-        try {
-            parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
-            allAnswers = new char[parts.size()];
-            Arrays.fill(allAnswers, 'F');
-        } catch (DataAccessException e) {
-            e.printStackTrace();
+    public MRController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview, ArrayList<Part> cstmparts) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview,cstmparts);
+        if(cstmparts == null) {
+            try {
+                parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
+            } catch (DataAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            parts = cstmparts;
         }
+        allAnswers = new char[parts.size()];
+        Arrays.fill(allAnswers, 'F');
     }
 
     @Override

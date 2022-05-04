@@ -27,6 +27,7 @@ public class SceneChanger {
         stage.setScene(scene);
         stage.setTitle(title);
         stage.show();
+        controller.disableView();
     }
 
     public void changeInterfaceScene(File selectedDB) throws IOException, DataAccessException {

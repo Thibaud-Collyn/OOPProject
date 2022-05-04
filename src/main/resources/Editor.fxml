@@ -50,9 +50,9 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="625.0" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#updateQuestion" text="Opslaan" />
+                  <Button fx:id="updateQuestionBtn" mnemonicParsing="false" onAction="#updateQuestion" text="Opslaan" />
                   <Button fx:id="restoreButton" mnemonicParsing="false" onAction="#restore" text="Herstellen" />
-                  <Button mnemonicParsing="false" text="Preview" />
+                  <Button fx:id="preview" mnemonicParsing="false" text="Preview" />
                </children>
                <padding>
                   <Insets right="10.0" />

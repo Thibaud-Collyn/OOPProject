@@ -35,7 +35,7 @@ public class ViewerManager {
 
     public void start() throws IOException {
         Question currentQuestion = questions.get(0);
-        AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect, false);
+        AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect, false, null);
         sceneChanger.changeViewerScene(controller.getFXML(), controller, currentQuestion.title());
     }
 
@@ -51,7 +51,7 @@ public class ViewerManager {
             Platform.exit();
         } else {
             Question currentQuestion = questions.get(0);
-            AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect, false);
+            AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect, false, null);
             sceneChanger.changeViewerScene(controller.getFXML(), controller, currentQuestion.title());
         }
     }

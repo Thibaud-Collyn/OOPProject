@@ -33,6 +33,9 @@ public abstract class PartEditor {
     }
 
     public abstract void loadParts();
+    public ArrayList<?> getParts() {
+        return null;
+    }
     public abstract void saveParts();
 
     public abstract String getCorrectAnswer();

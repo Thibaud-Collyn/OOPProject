@@ -17,12 +17,16 @@ public class MCCController extends AbstractController{
 
     private ArrayList<Part> parts;
 
-    public MCCController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
-        try {
-            parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
-        } catch (DataAccessException e) {
-            e.printStackTrace();
+    public MCCController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview, ArrayList<Part> cstmparts) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview, cstmparts);
+        if(cstmparts == null) {
+            try {
+                parts = dataAccessProvider.getDataAccessContext().getPartsDAO().getParts(question.questionId());
+            } catch (DataAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            parts = cstmparts;
         }
     }
 

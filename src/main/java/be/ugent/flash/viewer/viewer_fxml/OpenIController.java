@@ -4,9 +4,11 @@ import be.ugent.flash.Question;
 import be.ugent.flash.viewer.ViewerManager;
 import be.ugent.flash.db.DataAccessProvider;
 
+import java.util.ArrayList;
+
 public class OpenIController extends OpenController{
-    public OpenIController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
+    public OpenIController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview, ArrayList<?> cstmparts) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview, cstmparts);
     }
 
     @Override

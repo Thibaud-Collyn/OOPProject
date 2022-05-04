@@ -9,13 +9,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class OpenController extends AbstractController{
     public TextField text;
     public Label error;
 
-    public OpenController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
-        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview);
+    public OpenController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview, ArrayList<?> cstmparts) {
+        super(question, dataAccessProvider, viewerManager, wasCorrect, isPreview, cstmparts);
     }
 
     @Override

@@ -100,6 +100,15 @@ public class McsPartEditor extends PartEditor{
         loadGP();
     }
 
+    @Override
+    public ArrayList<?> getParts() {
+        ArrayList<Part> currentparts = new ArrayList<>();
+        for(int c = 0; c < newParts.size(); c++) {
+            currentparts.add(new Part(c, currentQuestion.questionId(), newParts.get(c).getText()));
+        }
+        return currentparts;
+    }
+
 //    Slaat alle parts die zich op dat moment in de editor bevinden op in de databank
     @Override
     public void saveParts() {

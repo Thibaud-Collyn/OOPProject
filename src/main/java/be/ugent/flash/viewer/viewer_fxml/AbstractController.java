@@ -14,6 +14,7 @@ import javafx.scene.text.TextFlow;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public abstract class AbstractController {
     public TextFlow textPart;
@@ -26,13 +27,14 @@ public abstract class AbstractController {
     protected boolean correct;
     protected ViewerManager viewerManager;
     protected boolean wasCorrect;
+    protected boolean isPreview;
 
-    public AbstractController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview) {
+    public AbstractController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview, ArrayList<?> cstmparts) {
         this.question = question;
         this.dataAccessProvider = dataAccessProvider;
         this.wasCorrect = wasCorrect;
         this.viewerManager = viewerManager;
-        this.card.getChildren().forEach((x) -> card.setDisable(isPreview));
+        this.isPreview = isPreview;
     }
 
     public void initialize() {
@@ -43,6 +45,10 @@ public abstract class AbstractController {
         } catch (NullPointerException e) {
             card.getChildren().remove(image);
         }
+    }
+
+    public void disableView() {
+        card.setDisable(isPreview);
     }
 
     public abstract String getFXML();
