@@ -29,7 +29,6 @@ public class MrPartEditor extends McsPartEditor{
         if (! correctAnswer.toString().matches("^F*$")) {
             return correctAnswer.toString();
         } else {
-//            TODO: throw error
             throw new IllegalArgumentException("Er moet minstens 1 juist antwoord zijn");
         }
     }

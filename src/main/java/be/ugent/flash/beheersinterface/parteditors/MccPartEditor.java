@@ -22,6 +22,7 @@ public class MccPartEditor extends McsPartEditor {
         }
     }
 
+//    laad/initialiseert de gridpane voor de vragen in newParts
     @Override
     public void loadGP() {
         gridPane.getChildren().clear();

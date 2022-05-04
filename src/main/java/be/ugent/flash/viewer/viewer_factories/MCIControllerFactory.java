@@ -15,5 +15,4 @@ public class MCIControllerFactory implements ControllerFactory{
     public AbstractController getController(Question question, DataAccessProvider dataAccessProvider, ViewerManager viewerManager, boolean wasCorrect, boolean isPreview, ArrayList<?> cstmparts) {
         return new MCIController(question, dataAccessProvider, viewerManager, wasCorrect, isPreview, (ArrayList<ImagePart>) cstmparts);
     }
-    //TODO: implement getController
 }

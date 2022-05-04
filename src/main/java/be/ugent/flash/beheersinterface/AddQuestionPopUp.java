@@ -3,7 +3,6 @@ package be.ugent.flash.beheersinterface;
 import be.ugent.flash.Question;
 import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.util.Map;
 
+// aparte pop-up klasse voor een vraag toe te voegen
 public class AddQuestionPopUp {
     private EditorController controller;
     private final Map<String, String> stdAnswers = Map.of("mcs","0","mcc","0","mci","0","mr","F","open","","openi","0");
@@ -66,6 +66,7 @@ public class AddQuestionPopUp {
         addQPopUp.showAndWait();
     }
 
+//    voegt een vraag toe aan de databank en laad de beheersinterface opnieuw in met de nu opgeslagen vraag aanwezig
     public void addQuestion(Stage stage) {
         String qType = types.get(questionTypes.getValue());
         DataAccessProvider dap = controller.getDataAccessProvider();

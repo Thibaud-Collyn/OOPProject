@@ -1,18 +1,15 @@
 package be.ugent.flash.beheersinterface.parteditors;
 
-import be.ugent.flash.Part;
 import be.ugent.flash.Question;
 import be.ugent.flash.beheersinterface.EditorController;
-import be.ugent.flash.db.DataAccessException;
 import be.ugent.flash.db.DataAccessProvider;
-import javafx.event.ActionEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
+// abstracte klasse voor part specifieke editors
 public abstract class PartEditor {
     protected VBox qEditorBox;
     protected Question currentQuestion;

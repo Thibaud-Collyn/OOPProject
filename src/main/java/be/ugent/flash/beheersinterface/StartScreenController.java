@@ -18,9 +18,9 @@ import java.sql.SQLException;
 public class StartScreenController {
     public BorderPane interfaceScreen;
 
+//    kiest afhangend van het opschrift van de knoppen de juiste methode
     public void change(ActionEvent event) throws IOException, SQLException {
         Button button = (Button)event.getSource();
-        File selectedDB = null;
         SceneChanger sceneChanger = new SceneChanger((Stage) interfaceScreen.getScene().getWindow());
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies databank");

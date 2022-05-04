@@ -33,12 +33,14 @@ public class ViewerManager {
         }};
     }
 
+//    laad eerste vraag in met initiële waarden
     public void start() throws IOException {
         Question currentQuestion = questions.get(0);
         AbstractController controller = typeFactories.get(currentQuestion.questionType()).getController(currentQuestion, dataAccessProvider, this, wasCorrect, false, null);
         sceneChanger.changeViewerScene(controller.getFXML(), controller, currentQuestion.title());
     }
 
+//    'Hoofdmethode' die de verwijdering(indien juist), toevoeging achteraan(indien fout) en oproeping van vragen regelt
     public void nextQuestion(Boolean correct) throws IOException {
         if (correct) {
             questions.remove(0);

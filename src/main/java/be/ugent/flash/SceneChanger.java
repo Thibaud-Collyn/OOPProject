@@ -18,6 +18,7 @@ public class SceneChanger {
         this.stage = stage;
     }
 
+//    regelt verandering van de viewer scenes
     public void changeViewerScene(String fxmlFile, AbstractController controller, String title) throws IOException {
         URL url = SceneChanger.class.getResource(fxmlFile);
         FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -30,6 +31,7 @@ public class SceneChanger {
         controller.disableView();
     }
 
+//    regelt verandering van de beheersinterface scenes
     public void changeInterfaceScene(File selectedDB) throws IOException, DataAccessException {
         URL url = EditorController.class.getResource("/Editor.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);

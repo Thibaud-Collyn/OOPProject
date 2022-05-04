@@ -15,6 +15,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+// aparte error pop-up klasse (bevat grotendeels opmaak van de pop-up)
 public class ErrorPopUp {
     public VBox box = new VBox();
     public Label errorMessage = new Label();

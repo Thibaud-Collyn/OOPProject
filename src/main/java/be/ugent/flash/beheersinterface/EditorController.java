@@ -113,6 +113,7 @@ public class EditorController extends StartScreenController {
 
 //    Functie om algemene elementen van de vraag(bv. titel, type,...) in de interface te tonen.
     public void generalEditor(Question question) {
+//        opmaak opnieuw 'initialiseren'
         QEditorBox.getChildren().clear();
         currentQuestion = question;
         removeQuestionButton.setDisable(false);
@@ -156,10 +157,10 @@ public class EditorController extends StartScreenController {
 
 //    opent een algemene image file chooser
     public void chooseImage(ActionEvent event) {
+        questionChanged(true);
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Kies afbeelding");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("jpg afbeelding", "*.jpg"), new FileChooser.ExtensionFilter("jpeg afbeelding", "*.jpeg"), new FileChooser.ExtensionFilter("png afbeelding", "*.png"));
-        questionChanged(true);
         File newImage = fileChooser.showOpenDialog(interfaceScreen.getScene().getWindow());
         if (newImage != null){
             try {
@@ -172,6 +173,7 @@ public class EditorController extends StartScreenController {
         }
     }
 
+//    veranderd de observable die bijhoud of een vraag reeds aangepast is
     public void questionChanged(boolean changed) {
         wasChanged.set(changed);
     }
@@ -187,7 +189,9 @@ public class EditorController extends StartScreenController {
         }
     }
 
+//    verwijderd een vraag
     public void removeImage(ActionEvent event) {
+        questionChanged(true);
         buttonReset(true);
     }
 
@@ -252,6 +256,7 @@ public class EditorController extends StartScreenController {
         }
     }
 
+//    laat een preview van de huidige kaart zien
     public void showPreview() {
         Question previewQuestion = new Question(currentQuestion.questionId(), title.getText(), qText.getText(), (byte[]) imageBox.getUserData(), currentQuestion.questionType(), null);
         previewPopUp.showPreview(previewQuestion, dataAccessProvider, partEditor.getParts());
