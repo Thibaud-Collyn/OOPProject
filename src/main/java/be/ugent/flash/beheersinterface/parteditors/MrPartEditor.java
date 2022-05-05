@@ -28,8 +28,10 @@ public class MrPartEditor extends McsPartEditor{
         }
         if (! correctAnswer.toString().matches("^F*$")) {
             return correctAnswer.toString();
+        } else if (correctAnswers.isEmpty()) {
+            throw new IllegalArgumentException("Antwoordenlijst mag niet leeg zijn");
         } else {
-            throw new IllegalArgumentException("Er moet minstens 1 juist antwoord zijn");
+            throw new IllegalArgumentException("Er moet minstens 1 antwoord juist zijn");
         }
     }
 }

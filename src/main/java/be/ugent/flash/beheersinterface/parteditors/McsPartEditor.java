@@ -142,6 +142,8 @@ public class McsPartEditor extends PartEditor{
         }
         if (answers == 1) {
             return correctAnswer;
+        } else if (correctAnswers.isEmpty()) {
+            throw new IllegalArgumentException("Antwoordenlijst mag niet leeg zijn");
         } else {
             throw new IllegalArgumentException("Er moet precies 1 antwoord juist zijn");
         }
